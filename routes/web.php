@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Home;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -14,6 +15,11 @@ use Inertia\Inertia;
 |
 */
 
-Route::get('/', function () {
+Route::get('/', [Home::class, 'index']);
+Route::get('/tabel/{id}', [Home::class, 'tabel'])->name('tabel');
+Route::get('/hapus/{id}', [Home::class, 'hapus'])->name('hapus_tabel');
+Route::post('/tambah', [Home::class, 'tambah'])->name('tambah_tabel');
+Route::post('/edit', [Home::class, 'edit'])->name('edit_tabel');
+Route::get('reactor/', function () {
     return Inertia::render('Home', ['title' => 'Dashboard']);
 });
