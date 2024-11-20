@@ -44,7 +44,7 @@
     <!-- CSS Files -->
     <link rel="stylesheet" href="{{ Vite::asset('resources/css/bootstrap.min.css') }}" />
     <link rel="stylesheet" href="{{ Vite::asset('resources/css/plugins.min.css') }}" />
-    <link rel="stylesheet" href="{{ Vite::asset('resources/css/kaiadmin.min.css') }}" />
+    <link rel="stylesheet" href="{{ Vite::asset('resources/css/kaiadmin.css') }}" />
 
     <title>{{ $title }} </title>
 </head>

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Graph;
 use App\Http\Controllers\Home;
 use App\Http\Controllers\Table;
 use Illuminate\Support\Facades\Route;
@@ -30,6 +31,8 @@ Route::get('/struktur/{id}', [Table::class, 'struktur'])->name('struktur');
 Route::post('/struktur/tambah', [Table::class, 'tambah_kolom'])->name('tambah_kolom');
 Route::post('/struktur/edit', [Table::class, 'edit_kolom'])->name('edit_kolom');
 Route::get('/struktur/hapus/{id}', [Table::class, 'hapus_kolom'])->name('hapus_kolom');
+
+Route::get('/grafik/{id}', [Graph::class, 'show'])->name('grafik');
 
 Route::get('reactor/', function () {
     return Inertia::render('Home', ['title' => 'Dashboard']);

@@ -14,7 +14,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a href="#base">
+            <a href="{{ route('grafik', $tabel->id) }}">
                 <i class="far fa-chart-bar"></i>
                 <p>Grafik</p>
             </a>

@@ -1,4 +1,12 @@
 <x-root>
+    <style>
+        td, th{
+            padding: 0.3rem 0.5rem !important;
+        }
+        .c-pointer{
+            cursor: pointer;
+        }
+    </style>
     <x-slot:title>{{ $title }} </x-slot:title>
     <x-slot:menu>
         <li class="nav-item active">
@@ -14,7 +22,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a href="#base">
+            <a href="{{ route('grafik', $table['tabel']->id) }}">
                 <i class="far fa-chart-bar"></i>
                 <p>Grafik</p>
             </a>
@@ -42,35 +50,44 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-hover table-striped">
+                        <table class="table table-bordered-bd-black table-head-bg-dark">
                             <thead>
                                 <tr>
-                                    <th>#</th>
+                                    <th style="background: #ced4da">#</th>
                                     @foreach ($table['kolom'] as $k)
-                                        <th>{{ $k->nama }}</th>
+                                        <th style="background: #ced4da">{{ $k->nama }}</th>
                                     @endforeach
-                                    <th>Aksi</th>
+                                    <th style="background: #ced4da">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                @if (count($table['kolom']) == 0)
+                                    <tr>
+                                        <td>Belum ada data. Tambahkan kolom terlebih dahulu</td>
+                                    </tr>
+                                @elseif (count($table['baris']) == 0)
+                                    <tr>
+                                        <td colspan="{{ count($table['kolom']) + 1 }}">Belum ada data</td>
+                                    </tr>
+                                @endif
                                 @php $no = 1; @endphp
                                 @foreach ($table['baris'] as $r)
                                     <tr>
-                                        <th scope="row">{{ $no++ }}</th>
+                                        <th scope="row" style="width: 30px; background: #ced4da">{{ $no++ }}</th>
                                         @foreach ($table['kolom'] as $k)
-                                            <td>{{ $table['data'][$r->id][$k->nama] ?? '' }}</td>
+                                            <td class="c-pointer">{{ $table['data'][$r->id][$k->nama] ?? '' }}</td>
                                         @endforeach
-                                        <td>
-                                            <button class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#edit_data"
+                                        <td style="width: 60px; background: #ced4da">
+                                            <button class="btn p-1 btn-link btn-secondary" data-bs-toggle="modal" data-bs-target="#edit_data"
                                                 data-url="{{ route('edit_data') }}" data-judul="Edit Data" data-id="{{ $r->id }}"
                                                 @foreach ($table['kolom'] as $k)
                                                     data-{{ $k->id }}="{{ $table['data'][$r->id][$k->nama] ?? '' }}"
                                                 @endforeach>
-                                                Edit
+                                                <i class="fa fa-edit"></i>
                                             </button>
-                                            <a href="{{ route('hapus_data', $r->id) }}" class="btn btn-sm btn-danger"
+                                            <a href="{{ route('hapus_data', $r->id) }}" class="btn btn-link p-1 btn-danger"
                                                 onclick="return confirm('Yakin ingin menghapus data ini?')">
-                                                Hapus
+                                                <i class="fa fa-times"></i>
                                             </a>
                                         </td>
                                     </tr>
