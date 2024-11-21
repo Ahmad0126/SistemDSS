@@ -58,7 +58,7 @@
                                         <td>{{ $k->nama }}</td>
                                         <td>
                                             <button class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-id="{{ $k->id }}"
-                                                data-bs-target="#edit_kolom" data-nama="{{ $k->nama }}"
+                                                data-bs-target="#edit_kolom" data-nama="{{ $k->nama }}" data-urutan="{{ $k->urutan }}"
                                                 data-url="{{ route('edit_kolom') }}" data-judul="Edit Kolom">
                                                 Edit
                                             </button>
@@ -88,7 +88,19 @@
                         @csrf
                         <input type="hidden" name="id">
                         <div class="form-group">
+                            <label for="">Nama Kolom</label>
                             <input type="text" name="nama" class="form-control" placeholder="Nama Kolom">
+                        </div>
+                        <div class="form-group">
+                            <label for="">Urutan</label>
+                            <select name="urutan" id="" class="form-control form-select">
+                                @php $nama = 'Pertama'; @endphp
+                                @foreach ($kolom as $k)
+                                    <option value="{{ $k->urutan }}">{{ $nama }}</option>
+                                    @php $nama = 'Setelah '.$k->nama; @endphp
+                                @endforeach
+                                <option value="" selected>Terakhir</option>
+                            </select>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -108,6 +120,7 @@
             modal.find('form').attr('action', button.data('url'));
             modal.find('h1.modal-title').html(button.data('judul'));
             modal.find('button[type="submit"]').html(button.data('judul'));
+            modal.find('select[name="urutan"]').val(button.data('urutan'));
             modal.find('input[name="id"]').val(id);
             modal.find('input[name="nama"]').val(nama);
         });

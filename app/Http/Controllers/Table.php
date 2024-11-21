@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 class Table extends Controller
 {
     public function struktur($id){
-        $data['kolom'] = Kolom::where('id_tabel', $id)->get();
+        $data['kolom'] = Kolom::where('id_tabel', $id)->orderBy('urutan')->get();
         $data['tabel'] = Tabel::find($id);
         $data['title'] = 'Struktur Tabel '.$data['tabel']->nama;
         return view('struktur', $data);
@@ -22,22 +22,10 @@ class Table extends Controller
             'id' => 'required:tabel,id'
         ]);
 
-        //tolong testing ini
-        $urutan = 1;
-        if($req->urutan){
-            $urutan = $req->urutan;
-            $cols = Kolom::where('id_tabel', $req->id)->where('urutan', '>=', $req->urutan)->get();
-            foreach($cols as $kolom){
-                $old_col = Kolom::find($kolom->id);
-                $old_col->urutan = $old_col->urutan + 1;
-                $old_col->save();
-            }
-        }
-
         $kolom = new Kolom();
         $kolom->id_tabel = $req->id;
         $kolom->nama = $req->nama;
-        $kolom->urutan = $urutan;
+        $kolom->urutan = $kolom->get_urutan($req->id, $req->urutan);
         $kolom->save();
 
         return redirect()->back()->with('alert', 'Berhasil menambah kolom');
@@ -48,9 +36,10 @@ class Table extends Controller
             'id' => 'required:kolom,id'
         ]);
 
+        $col = new Kolom();
         $kolom = Kolom::find($req->id);
         $kolom->nama = $req->nama;
-        $kolom->urutan = 1;
+        $kolom->urutan = $col->edit_urutan($kolom->urutan, $req->urutan, $kolom->id_tabel);
         $kolom->save();
 
         return redirect()->back()->with('alert', 'Berhasil mengedit kolom');
@@ -69,7 +58,7 @@ class Table extends Controller
         }
         $row = new Baris();
         $row->id_tabel = $req->id;
-        $row->urutan = 1;
+        $row->urutan = $row->get_urutan($req->id);
         $row->save();
 
         foreach($col as $kolom){

@@ -63,11 +63,11 @@
                             <tbody>
                                 @if (count($table['kolom']) == 0)
                                     <tr>
-                                        <td>Belum ada data. Tambahkan kolom terlebih dahulu</td>
+                                        <td colspan="2">Belum ada data. Tambahkan kolom terlebih dahulu</td>
                                     </tr>
                                 @elseif (count($table['baris']) == 0)
                                     <tr>
-                                        <td colspan="{{ count($table['kolom']) + 1 }}">Belum ada data</td>
+                                        <td colspan="{{ count($table['kolom']) + 2 }}">Belum ada data</td>
                                     </tr>
                                 @endif
                                 @php $no = 1; @endphp

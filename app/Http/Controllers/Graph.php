@@ -31,15 +31,29 @@ class Graph extends Controller
             }
             array_push($series, [
                 'name' => $k->nama,
-                'type' => 'bar',
+                'type' => $table['tabel']->tipe,
                 'data' => $s_data
             ]);
         }
         
         $data['data'] = $g_data;
         $data['series'] = $series;
-        $data['table'] = $tabel->getData($id);
+        $data['table'] = $table;
         $data['title'] = 'Grafik '.$data['table']['tabel']->nama;
         return view('grafik', $data);
+    }
+    public function simpan(Request $req){
+        $req->validate([
+            'orientasi' => 'required',
+            'tipe' => 'required',
+            'id' => 'required:tabel,id'
+        ]);
+
+        $tabel = Tabel::find($req->id);
+        $tabel->tipe = $req->tipe;
+        $tabel->orientasi = $req->orientasi;
+        $tabel->save();
+
+        return redirect()->back()->with('alert', 'Berhasil mengubah konfigurasi');
     }
 }

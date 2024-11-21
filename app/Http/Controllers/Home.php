@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Baris;
 use App\Models\Data;
+use App\Models\User;
+use App\Models\Baris;
 use App\Models\Kolom;
 use App\Models\Tabel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\RedirectResponse;
 
 class Home extends Controller
 {
@@ -14,6 +18,52 @@ class Home extends Controller
         $data['tabel'] = Tabel::all();
         $data['title'] = 'Dashboard';
         return view('home', $data);
+    }
+    public function login(Request $req):RedirectResponse{
+        $user = $req->validate([
+            'email' => 'required',
+            'password' => 'required'
+        ]);
+
+        if(Auth::attempt($user)){
+            $req->session()->regenerate();
+            return redirect(route('base'));
+        }
+
+        return back()->withErrors([
+            'email' => 'Login Failed!'
+        ])->onlyInput('email');
+    }
+    public function daftar(Request $req){
+        $req->validate([
+            'nama' => 'required',
+            'email' => 'required|unique:users,email',
+            'password' => 'required',
+        ]);
+        
+        if($req->password != $req->password_konfirmasi){
+            return back()->withErrors('Konfirmasi kembali password anda')->withInput();
+        }
+
+        $user = new User();
+        $user->nama = $req->nama;
+        $user->email = $req->email;
+        $user->level = 'User';
+        $user->password = Hash::make($req->password);
+        $user->save();
+
+        Auth::login($user);
+        $req->session()->regenerate();
+        return redirect(route('base'));
+    }
+    public function logout(Request $request): RedirectResponse{
+        Auth::logout();
+    
+        $request->session()->invalidate();
+    
+        $request->session()->regenerateToken();
+    
+        return redirect('/login');
     }
     public function tabel($id){
         $tabel = new Tabel();
@@ -28,6 +78,8 @@ class Home extends Controller
 
         $tabel = new Tabel();
         $tabel->nama = $req->nama;
+        $tabel->tipe = 'bar';
+        $tabel->orientasi = 'h';
         $tabel->save();
 
         return redirect()->back()->with('alert', 'Berhasil menambah tabel');

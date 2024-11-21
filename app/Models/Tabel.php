@@ -13,8 +13,8 @@ class Tabel extends Model
 
     public function getData($id){
         $tabel = self::find($id);
-        $kolom = DB::table('kolom')->where('id_tabel', $tabel->id)->get()->toArray();
-        $baris = DB::table('baris')->where('id_tabel', $tabel->id)->get()->toArray();
+        $kolom = DB::table('kolom')->where('id_tabel', $tabel->id)->orderBy('urutan')->get()->toArray();
+        $baris = DB::table('baris')->where('id_tabel', $tabel->id)->orderBy('urutan')->get()->toArray();
         $cells = DB::table('data')->whereIn('id_baris', array_column($baris, 'id'))->get();
 
         $data = [];
