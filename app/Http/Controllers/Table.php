@@ -44,9 +44,13 @@ class Table extends Controller
 
         return redirect()->back()->with('alert', 'Berhasil mengedit kolom');
     }
-    public function hapus_kolom($id){
-        Data::destroy(Data::where('id_kolom', $id)->get());
-        Kolom::destroy($id);
+    public function hapus_kolom(Request $req){
+        $req->validate([
+            'id' => 'required:kolom,id'
+        ]);
+
+        Data::destroy(Data::where('id_kolom', $req->id)->get());
+        Kolom::destroy($req->id);
         
         return redirect()->back()->with('alert', 'Berhasil menghapus kolom');
     }
@@ -72,22 +76,16 @@ class Table extends Controller
         return redirect()->back()->with('alert', 'Berhasil menambah data');
     }
     public function edit_data(Request $req){
-        $row = Baris::find($req->id);
-        $table = Tabel::find($row->id_tabel);
-
-        $col = Kolom::where('id_tabel', $table->id)->get();
-        foreach($col as $kolom){
-            $d = Data::where(['id_baris' => $row->id, 'id_kolom' => $kolom->id])->get()->first();
-            if($d){
-                $data = Data::find($d->id);
-            }else{
-                $data = new Data();
-            }
-            $data->id_kolom = $kolom->id;
-            $data->id_baris = $row->id;
-            $data->data = $req[$kolom->id];
-            $data->save();
+        $d = Data::where(['id_baris' => $req->id_baris, 'id_kolom' => $req->id_kolom])->get()->first();
+        if($d){
+            $data = Data::find($d->id);
+        }else{
+            $data = new Data();
         }
+        $data->id_kolom = $req->id_kolom;
+        $data->id_baris = $req->id_baris;
+        $data->data = $req->data ?? '';
+        $data->save();
         
         return redirect()->back()->with('alert', 'Berhasil nemgedit data');
     }
@@ -96,5 +94,29 @@ class Table extends Controller
         Baris::destroy($id);
         
         return redirect()->back()->with('alert', 'Berhasil menghapus data');
+    }
+    public function hapus_baris(Request $req){
+        $req->validate([
+            'id' => 'required|exists:baris,id'
+        ]);
+
+        Data::destroy(Data::where('id_baris', $req->id)->get());
+        Baris::destroy($req->id);
+        
+        return redirect()->back()->with('alert', 'Berhasil menghapus baris');
+    }
+    public function tambah_baris(Request $req){
+        $req->validate([
+            'id' => 'required|exists:tabel,id',
+            'jumlah' => 'required|integer'
+        ]);
+        for($i = 1; $i <= $req->jumlah; $i++){
+            $row = new Baris();
+            $row->id_tabel = $req->id;
+            $row->urutan = $row->get_urutan($req->id, $req->urutan);
+            $row->save();
+        }
+        
+        return redirect()->back()->with('alert', 'Berhasil menambah baris');
     }
 }

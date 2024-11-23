@@ -21,7 +21,7 @@ class Graph extends Controller
         $series = [];
         //make g_data
         foreach($baris as $r){
-            array_push($g_data, $t_data[$r->id][$first_kolom[0]->nama]);
+            array_push($g_data, $t_data[$r->id][$first_kolom[0]->nama] ?? []);
         }
         //make series
         foreach($rest_kolom as $k){

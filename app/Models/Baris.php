@@ -17,17 +17,17 @@ class Baris extends Model
             ->where('id_tabel', $tabel)->get()->first();
 
         $urutan = $last_col->pos + 1;
-        // if($force){
-        //     $rows = DB::table($this->table)->where('id_tabel', $tabel)->where('urutan', '>=', $force)->get();
-        //     if($rows->isNotEmpty()){
-        //         $urutan = $force;
-        //         foreach($rows as $baris){
-        //             $old_col = Baris::find($baris->id);
-        //             $old_col->urutan = $old_col->urutan + 1;
-        //             $old_col->save();
-        //         }
-        //     }
-        // }
+        if($force){
+            $rows = DB::table($this->table)->where('id_tabel', $tabel)->where('urutan', '>=', $force)->get();
+            if($rows->isNotEmpty()){
+                $urutan = $force;
+                foreach($rows as $baris){
+                    $old_row = Baris::find($baris->id);
+                    $old_row->urutan = $old_row->urutan + 1;
+                    $old_row->save();
+                }
+            }
+        }
 
         return $urutan;
     }

@@ -119,7 +119,7 @@
                                                 </div>
                                                 <div class="u-text text-white">
                                                     <h4>{{ Auth::user()->nama }}</h4>
-                                                    <p class="op-7">{{ Auth::user()->email }}</p>
+                                                    <small class="op-7">{{ Auth::user()->email }}</small>
                                                 </div>
                                             </div>
                                         </li>

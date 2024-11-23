@@ -43,10 +43,13 @@ Route::middleware('auth')->group(function(){
     Route::post('/tabel/edit', [Table::class, 'edit_data'])->name('edit_data');
     Route::get('/tabel/hapus/{id}', [Table::class, 'hapus_data'])->name('hapus_data');
     
+    Route::post('/baris/tambah', [Table::class, 'tambah_baris'])->name('tambah_baris');
+    Route::post('/baris/hapus', [Table::class, 'hapus_baris'])->name('hapus_baris');
+
     Route::get('/struktur/{id}', [Table::class, 'struktur'])->name('struktur');
     Route::post('/struktur/tambah', [Table::class, 'tambah_kolom'])->name('tambah_kolom');
     Route::post('/struktur/edit', [Table::class, 'edit_kolom'])->name('edit_kolom');
-    Route::get('/struktur/hapus/{id}', [Table::class, 'hapus_kolom'])->name('hapus_kolom');
+    Route::post('/struktur/hapus/', [Table::class, 'hapus_kolom'])->name('hapus_kolom');
     
     Route::get('/grafik/{id}', [Graph::class, 'show'])->name('grafik');
     Route::post('/grafik/simpan', [Graph::class, 'simpan'])->name('simpan_grafik');
