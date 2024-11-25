@@ -4,10 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Tabel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class Graph extends Controller
 {
     public function show($id){
+        if(!Gate::allows('private_project', $id)){
+            abort(403);
+        }
         $tabel = new Tabel();
         $table = $tabel->getData($id);
 
@@ -39,7 +43,7 @@ class Graph extends Controller
         $data['data'] = $g_data;
         $data['series'] = $series;
         $data['table'] = $table;
-        $data['title'] = 'Grafik '.$data['table']['tabel']->nama;
+        $data['title'] = $data['table']['tabel']->nama;
         return view('grafik', $data);
     }
     public function simpan(Request $req){
@@ -52,8 +56,12 @@ class Graph extends Controller
         $tabel = Tabel::find($req->id);
         $tabel->tipe = $req->tipe;
         $tabel->orientasi = $req->orientasi;
+        $tabel->mr = $req->mr;
+        $tabel->ml = $req->ml;
+        $tabel->mt = $req->mt;
+        $tabel->mb = $req->mb;
         $tabel->save();
 
-        return redirect()->back()->with('alert', 'Berhasil mengubah konfigurasi');
+        return redirect()->back()->with('alert', 'Berhasil mengubah pengaturan');
     }
 }

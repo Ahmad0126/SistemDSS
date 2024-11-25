@@ -51,26 +51,16 @@
 
 <body>
     <div class="wrapper">
-        {{-- <x-sidebar>
-            {{ $menu ?? '' }}
-        </x-sidebar> --}}
-
         <div class="main-panel w-100">
             <div class="main-header w-100" data-background-color="dark">
                 <div class="main-header-logo">
                     <!-- Logo Header -->
                     <div class="logo-header" data-background-color="dark">
                         <div class="nav-toggle">
-                            {{-- <button class="btn btn-toggle toggle-sidebar">
-                                <i class="gg-menu-right"></i>
-                            </button> --}}
                             <button class="btn btn-toggle topbar-toggler">
                                 <i class="gg-menu-left"></i>
                             </button>
                         </div>
-                        {{-- <button class="topbar-toggler more">
-                            <i class="gg-more-vertical-alt"></i>
-                        </button> --}}
                     </div>
                     <!-- End Logo Header -->
                 </div>
@@ -78,25 +68,19 @@
                 <nav class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom" data-background-color="dark">
                     <div class="container-fluid">
                         <ul class="navbar-nav topbar-nav align-items-center w-100">
-                            <li class="nav-item active">
-                                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('base') }}">Home</a>
+                            </li>
+                            @can('admin')
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('user') }}">User</a>
+                                </li>
+                            @endcan
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Project</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">Link</a>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
-                                    Dropdown
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="#">Action</a>
-                                    <a class="dropdown-item" href="#">Another action</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="#">Something else here</a>
-                                </div>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link disabled" href="#">Disabled</a>
+                                <a class="nav-link" href="#">Template</a>
                             </li>
                             <li class="nav-item topbar-user dropdown hidden-caret ms-md-auto">
                                 <a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#"

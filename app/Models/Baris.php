@@ -31,4 +31,26 @@ class Baris extends Model
 
         return $urutan;
     }
+    public function edit_urutan($last_urutan, $edit, $id){
+        $urutan = $last_urutan;
+        if($edit && $last_urutan != $edit){
+            $rows = DB::table($this->table)->where('id_tabel', $id)->where('urutan', '>=', $edit)->get();
+            if($rows->isNotEmpty()){
+                $urutan = $edit;
+                foreach($rows as $baris){
+                    $old_row = Baris::find($baris->id);
+                    $old_row->urutan = $old_row->urutan + 1;
+                    $old_row->save();
+                }
+            }
+        }else if(!$edit){
+            $last_row = DB::table($this->table)
+                ->selectRaw("MAX(urutan) as pos")
+                ->where('id_tabel', $id)->get()->first();
+
+            $urutan = $last_row->pos + 1;
+        }
+
+        return $urutan;
+    }
 }

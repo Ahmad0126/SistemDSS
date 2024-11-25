@@ -1,25 +1,5 @@
 <x-root>
     <x-slot:title>{{ $title }} </x-slot:title>
-    <x-slot:menu>
-        <li class="nav-item">
-            <a href="{{ route('tabel', $table['tabel']->id) }}">
-                <i class="fas fa-layer-group"></i>
-                <p>Data</p>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="{{ route('struktur', $table['tabel']->id) }}">
-                <i class="fas fa-th-list"></i>
-                <p>Struktur Tabel</p>
-            </a>
-        </li>
-        <li class="nav-item active">
-            <a href="{{ route('grafik', $table['tabel']->id) }}">
-                <i class="far fa-chart-bar"></i>
-                <p>Grafik</p>
-            </a>
-        </li>
-    </x-slot:menu>
 
     <div class="row">
         <div class="col-md-8">
@@ -44,16 +24,16 @@
         </style>
         <div class="col-md-4">
             <div class="card">
-                <div class="card-header">
-                    <div class="card-title">Settings</div>
-                </div>
-                <div class="card-body">
-                    <form action="{{ route('simpan_grafik') }}" method="post">
+                <form action="{{ route('simpan_grafik') }}" method="post">
+                    <div class="card-header d-flex justify-content-between">
+                        <div class="card-title">Pengaturan</div>
+                        <button type="submit" class="btn btn-sm btn-primary">Terapkan</button>
+                    </div>
+                    <div class="card-body">
                         @csrf
                         <div class="form-group">
                             <label for="">Tipe</label>
-                            <select name="tipe" id="" class="form-control form-select"
-                                onchange="this.form.submit()">
+                            <select name="tipe" id="" class="form-control form-select">
                                 <option @selected($table['tabel']->tipe == 'bar') value="bar">Bar</option>
                                 <option @selected($table['tabel']->tipe == 'line') value="line">Line</option>
                                 <option @selected($table['tabel']->tipe == 'scatter') value="scatter">Scatter</option>
@@ -64,28 +44,69 @@
                         </div>
                         <div class="form-group">
                             <label for="">Orientasi</label>
-                            <select name="orientasi" id="" class="form-control form-select"
-                                onchange="this.form.submit()">
+                            <select name="orientasi" id="" class="form-control form-select">
                                 <option @selected($table['tabel']->orientasi == 'h') value="h">Horizontal</option>
                                 <option @selected($table['tabel']->orientasi == 'v') value="v">Vertikal</option>
                             </select>
                         </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="flip" value="true"
-                                id="flip">
-                            <label class="form-check-label" for="flip">
-                                Balikkan Kolom dengan Baris
-                            </label>
-                        </div>
                         <div class="form-group">
-                            <label for="">width</label>
-                            <div class="input-group">
-                                <input type="text" name="" id="t">
-                                <input type="range" class="w-100" min="0" max="1000" name="id" id="wi">
+                            <div class="row align-items-center">
+                                <div class="col-7">
+                                    <label for="">Margin Kanan</label>
+                                    <input type="range" class="form-range" min="0" max="100" name="mr" id="mr" value="{{ $table['tabel']->mr }}">
+                                </div>
+                                <div class="col-5">
+                                    <div class="input-group">
+                                        <input type="number" min="0" max="100" name="" id="lmr" class="form-control" value="{{ $table['tabel']->mr }}">
+                                        <span class="input-group-text">%</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </form>
-                </div>
+                        <div class="form-group">
+                            <div class="row align-items-center">
+                                <div class="col-7">
+                                    <label for="">Margin Kiri</label>
+                                    <input id="ml" type="range" class="form-range" min="0" max="100" name="ml" value="{{ $table['tabel']->ml }}">
+                                </div>
+                                <div class="col-5">
+                                    <div class="input-group">
+                                        <input id="lml" type="number" min="0" max="100" name="" class="form-control" value="{{ $table['tabel']->ml }}">
+                                        <span class="input-group-text">%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row align-items-center">
+                                <div class="col-7">
+                                    <label for="">Margin Atas</label>
+                                    <input id="mt" type="range" class="form-range" min="0" max="100" name="mt" value="{{ $table['tabel']->mt }}">
+                                </div>
+                                <div class="col-5">
+                                    <div class="input-group">
+                                        <input id="lmt" type="number" min="0" max="100" name="" class="form-control" value="{{ $table['tabel']->mt }}">
+                                        <span class="input-group-text">%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row align-items-center">
+                                <div class="col-7">
+                                    <label for="">Margin Bawah</label>
+                                    <input id="mb" type="range" class="form-range" min="0" max="100" name="mb" value="{{ $table['tabel']->mb }}">
+                                </div>
+                                <div class="col-5">
+                                    <div class="input-group">
+                                        <input id="lmb" type="number" min="0" max="100" name="" class="form-control" value="{{ $table['tabel']->mb }}">
+                                        <span class="input-group-text">%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
         <div class="col">
@@ -98,33 +119,33 @@
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" role="button"
                                         data-bs-toggle="dropdown" aria-expanded="false">
-                                        Kolom
+                                        Tambah
                                     </a>
                                     <ul class="dropdown-menu">
                                         <li>
                                             <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#edit_kolom"
                                                 data-url="{{ route('tambah_kolom') }}" data-judul="Tambah Kolom" data-id="{{ $table['tabel']->id }}">
-                                                Tambah
+                                                Kolom
                                             </a>
                                         </li>
                                         <li>
-                                            <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#hapus_kolom">Hapus</a>
+                                            <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#tambah_baris">
+                                                Baris
+                                            </a>
                                         </li>
                                     </ul>
                                 </li>
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" role="button"
                                         data-bs-toggle="dropdown" aria-expanded="false">
-                                        Baris
+                                        Hapus
                                     </a>
                                     <ul class="dropdown-menu">
                                         <li>
-                                            <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#edit_baris">
-                                                Tambah
-                                            </a>
+                                            <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#hapus_kolom">Kolom</a>
                                         </li>
                                         <li>
-                                            <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#hapus_baris">Hapus</a>
+                                            <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#hapus_baris">Baris</a>
                                         </li>
                                     </ul>
                                 </li>
@@ -160,7 +181,7 @@
                                 @php $no = 1; @endphp
                                 @foreach ($table['baris'] as $r)
                                     <tr>
-                                        <th scope="row" style="width: 30px; background: #ced4da">{{ $no++ }}</th>
+                                        <th scope="row" class="baris c-pointer" data-id="{{ $r->id }}" data-urutan="{{ $r->urutan }}" style="width: 30px; background: #ced4da">{{ $no++ }}</th>
                                         @foreach ($table['kolom'] as $k)
                                             <td class="c-pointer data" data-id_kolom="{{ $k->id }}" data-id_baris="{{ $r->id }}">{{ $table['data'][$r->id][$k->nama] ?? '' }}</td>
                                         @endforeach
@@ -208,7 +229,7 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="edit_baris">
+    <div class="modal fade" id="tambah_baris">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -280,7 +301,7 @@
                                         @php $nama = 'Setelah '.$k->nama; @endphp
                                     @endforeach
                                 </select>
-                                <button type="submit" href="{{ route('hapus_kolom', $k->id) }}" class="btn btn-sm btn-danger"
+                                <button type="submit" class="btn btn-sm btn-danger"
                                     onclick="return confirm('Yakin ingin menghapus kolom ini?\r\nData dalam kolom ini juga akan dihapus')">
                                     Hapus
                                 </button>
@@ -301,23 +322,83 @@
                 <form action="{{ route('hapus_baris') }}" method="post">
                     <div class="modal-body">
                         @csrf
+                        <input type="hidden" name="id" value="{{ $table['tabel']->id }}">
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="">Dari Baris</label>
+                                    <select name="from" id="" class="form-control form-select">
+                                        @php $no = 1; @endphp
+                                        @foreach ($table['baris'] as $b)
+                                            <option value="{{ $b->urutan }}">{{ $no++ }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="">Sampai Baris</label>
+                                    <select name="to" id="" class="form-control form-select">
+                                        <option value="">...</option>
+                                        @php $no = 1; @endphp
+                                        @foreach ($table['baris'] as $b)
+                                            <option value="{{ $b->urutan }}">{{ $no++ }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-danger"
+                            onclick="return confirm('Yakin ingin menghapus baris ini?\r\nData dalam baris ini juga akan dihapus')">
+                            Hapus
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="edit_baris">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5">Hapus Baris</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{{ route('edit_baris') }}" method="post">
+                    <div class="modal-body">
+                        @csrf
+                        <input type="hidden" name="id" value="{{ $table['tabel']->id }}">
                         <div class="form-group">
-                            <label for="">Pilih Baris</label>
+                            <label for="">Pindahkan urutan baris</label>
                             <div class="input-group">
-                                <select name="id" id="" class="form-control form-select">
-                                    @php $no = 1; @endphp
+                                <input type="hidden" name="id">
+                                <select name="urutan" id="" class="form-control form-select">
+                                    @php $no = 1; $nama = 'Pertama'; @endphp
                                     @foreach ($table['baris'] as $b)
-                                        <option value="{{ $b->id }}">{{ $no++ }}</option>
+                                        <option value="{{ $b->urutan }}">{{ $nama }}</option>
+                                        @php $nama = 'Setelah baris ke '.$no++; @endphp
                                     @endforeach
+                                    <option value="" selected>Terakhir</option>
                                 </select>
-                                <button type="submit" href="{{ route('hapus_baris', $k->id) }}" class="btn btn-sm btn-danger"
-                                    onclick="return confirm('Yakin ingin menghapus baris ini?\r\nData dalam baris ini juga akan dihapus')">
-                                    Hapus
-                                </button>
+                                <button type="submit" class="btn btn-primary">Pindahkan</button>
                             </div>
                         </div>
                     </div>
                 </form>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <form action="{{ route('hapus_baris') }}" method="post">
+                        @csrf
+                        <input type="hidden" name="id" value="{{ $table['tabel']->id }}">
+                        <button type="submit" class="btn btn-danger" name="from"
+                            onclick="return confirm('Yakin ingin menghapus baris ini?\r\nData dalam baris ini juga akan dihapus')">
+                            Hapus
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -346,19 +427,51 @@
                 modal.find('input[name="{{ $k->id }}"]').val(button.data('{{ $k->id }}'));
             @endforeach
         });
-        $('#wi').on('change', function(event){
-            $('#t').val($(this).val())
-        });
         $('.data').on('click', function(event){
-            $('input[name="data"]').val($(this).html())
-            $('input[name="id_kolom"]').val($(this).data('id_kolom'))
-            $('input[name="id_baris"]').val($(this).data('id_baris'))
-            $('#edit_data').modal('show')
+            var modal = $('#edit_data')
+            modal.find('input[name="data"]').val($(this).html())
+            modal.find('input[name="id_kolom"]').val($(this).data('id_kolom'))
+            modal.find('input[name="id_baris"]').val($(this).data('id_baris'))
+            modal.modal('show')
+        })
+        $('.baris').on('click', function(event){
+            var modal = $('#edit_baris')
+            modal.find('input[name="id"]').val($(this).data('id'))
+            modal.find('button[name="from"]').val($(this).data('urutan'))
+            modal.modal('show')
         })
     </script>
     <!-- Chart JS -->
     <script src="{{ Vite::asset('resources/js/plugin/apache-echarts/echarts.min.js') }}"></script>
     <script>
+        $('#mr').on('change', function(event){
+            $('#lmr').val($(this).val())
+        });
+        $('#lmr').on('change', function(event){
+            $('#mr').val($(this).val())
+        });
+
+        $('#ml').on('change', function(event){
+            $('#lml').val($(this).val())
+        });
+        $('#lml').on('change', function(event){
+            $('#ml').val($(this).val())
+        });
+
+        $('#mt').on('change', function(event){
+            $('#lmt').val($(this).val())
+        });
+        $('#lmt').on('change', function(event){
+            $('#mt').val($(this).val())
+        });
+        
+        $('#mb').on('change', function(event){
+            $('#lmb').val($(this).val())
+        });
+        $('#lmb').on('change', function(event){
+            $('#mb').val($(this).val())
+        });
+
         // Initialize the echarts instance based on the prepared dom
         var myChart = echarts.init(document.getElementById('barChart'));
 
@@ -366,6 +479,12 @@
         var option = {
             tooltip: {
                 trigger: 'axis'
+            },
+            grid:{
+                left: '{{ $table['tabel']->ml }}%',
+                right: '{{ $table['tabel']->mr }}%',
+                top: '{{ $table['tabel']->mt }}%',
+                bottom: '{{ $table['tabel']->mb }}%',
             },
             legend: {
                 data: @php echo json_encode(array_slice(array_column($table['kolom'], 'nama'), 1)); @endphp

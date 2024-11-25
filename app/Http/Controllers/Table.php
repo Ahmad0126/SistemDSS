@@ -7,6 +7,7 @@ use App\Models\Data;
 use App\Models\Kolom;
 use App\Models\Tabel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class Table extends Controller
 {
@@ -16,6 +17,7 @@ class Table extends Controller
         $data['title'] = 'Struktur Tabel '.$data['tabel']->nama;
         return view('struktur', $data);
     }
+
     public function tambah_kolom(Request $req){
         $req->validate([
             'nama' => 'required',
@@ -95,13 +97,25 @@ class Table extends Controller
         
         return redirect()->back()->with('alert', 'Berhasil menghapus data');
     }
+
     public function hapus_baris(Request $req){
         $req->validate([
-            'id' => 'required|exists:baris,id'
+            'from' => 'required'
         ]);
 
-        Data::destroy(Data::where('id_baris', $req->id)->get());
-        Baris::destroy($req->id);
+        $baris = Baris::where('id_tabel', $req->id);
+        if($req->to){
+            $baris->whereBetween('urutan', [$req->from, $req->to])->get();
+        }else{
+            $baris->where('urutan', $req->from)->get();
+        }
+
+        ddd($baris);
+
+        foreach($baris as $b){
+            Data::destroy(Data::where('id_baris', $b->id)->get());
+        }
+        Baris::destroy($baris);
         
         return redirect()->back()->with('alert', 'Berhasil menghapus baris');
     }
@@ -118,5 +132,17 @@ class Table extends Controller
         }
         
         return redirect()->back()->with('alert', 'Berhasil menambah baris');
+    }
+    public function edit_baris(Request $req){
+        $req->validate([
+            'id' => 'required|exists:baris,id'
+        ]);
+
+        $baris = new Baris();
+        $row = Baris::find($req->id);
+        $row->urutan = $baris->edit_urutan($row->urutan, $req->urutan, $row->id_tabel);
+        $row->save();
+        
+        return redirect()->back()->with('alert', 'Berhasil memindahkan baris');
     }
 }

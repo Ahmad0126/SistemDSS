@@ -15,7 +15,7 @@ use Illuminate\Http\RedirectResponse;
 class Home extends Controller
 {
     public function index(){
-        $data['tabel'] = Tabel::all();
+        $data['tabel'] = Tabel::where('id_user', Auth::user()->id)->get();
         $data['title'] = 'Dashboard';
         return view('home', $data);
     }
@@ -78,8 +78,13 @@ class Home extends Controller
 
         $tabel = new Tabel();
         $tabel->nama = $req->nama;
+        $tabel->id_user = Auth::user()->id;
         $tabel->tipe = 'bar';
         $tabel->orientasi = 'h';
+        $tabel->mr = 10;
+        $tabel->ml = 10;
+        $tabel->mt = 6;
+        $tabel->mb = 6;
         $tabel->save();
 
         return redirect()->back()->with('alert', 'Berhasil menambah tabel');

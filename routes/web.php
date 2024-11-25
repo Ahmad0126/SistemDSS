@@ -33,10 +33,12 @@ Route::middleware('auth')->group(function(){
     Route::post('/tambah', [Home::class, 'tambah'])->name('tambah_tabel');
     Route::post('/edit', [Home::class, 'edit'])->name('edit_tabel');
     
-    Route::get('/user', [User::class, 'index'])->name('user');
-    Route::post('/user/tambah', [User::class, 'tambah'])->name('tambah_user');
-    Route::post('/user/edit', [User::class, 'edit'])->name('edit_user');
-    Route::get('/user/hapus/{id}', [User::class, 'hapus'])->name('hapus_user');
+    Route::middleware('can:admin')->group(function(){
+        Route::get('/user', [User::class, 'index'])->name('user');
+        Route::post('/user/tambah', [User::class, 'tambah'])->name('tambah_user');
+        Route::post('/user/edit', [User::class, 'edit'])->name('edit_user');
+        Route::get('/user/hapus/{id}', [User::class, 'hapus'])->name('hapus_user');
+    });
     
     Route::get('/tabel/{id}', [Home::class, 'tabel'])->name('tabel');
     Route::post('/tabel/tambah', [Table::class, 'tambah_data'])->name('tambah_data');
@@ -44,6 +46,7 @@ Route::middleware('auth')->group(function(){
     Route::get('/tabel/hapus/{id}', [Table::class, 'hapus_data'])->name('hapus_data');
     
     Route::post('/baris/tambah', [Table::class, 'tambah_baris'])->name('tambah_baris');
+    Route::post('/baris/edit', [Table::class, 'edit_baris'])->name('edit_baris');
     Route::post('/baris/hapus', [Table::class, 'hapus_baris'])->name('hapus_baris');
 
     Route::get('/struktur/{id}', [Table::class, 'struktur'])->name('struktur');
