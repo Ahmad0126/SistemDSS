@@ -261,10 +261,12 @@
                                                 data-level="{{ $t->level }}" data-edit="true">
                                                 Edit
                                             </button>
-                                            <a href="{{ route('hapus_user', $t->id) }}" class="btn btn-sm btn-danger"
-                                                onclick="return confirm('Yakin ingin menghapus user ini?')">
-                                                Hapus
-                                            </a>
+                                            @if (Auth::user()->id != $t->id)
+                                                <a href="{{ route('hapus_user', $t->id) }}" class="btn btn-sm btn-danger"
+                                                    onclick="return confirm('Yakin ingin menghapus user ini?')">
+                                                    Hapus
+                                                </a>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach

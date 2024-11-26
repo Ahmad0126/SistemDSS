@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User as ModelUser;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class User extends Controller
@@ -47,6 +48,9 @@ class User extends Controller
         return redirect()->back()->with('alert', 'Berhasil mengedit user');
     }
     public function hapus($id){
+        if($id == Auth::user()->id){
+            return redirect()->back()->withErrors('Dilarang BUNDIR di sini');
+        }
         ModelUser::destroy($id);
         
         return redirect()->back()->with('alert', 'Berhasil menghapus user');
