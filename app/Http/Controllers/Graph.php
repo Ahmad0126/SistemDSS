@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Baris;
 use App\Models\Tabel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -17,7 +18,8 @@ class Graph extends Controller
         $data = $tabel->get_grafik($id);
         $data['title'] = $data['table']['tabel']->nama;
         
-        if($data['table']['tabel']->tipe == 'pie' || $data['table']['tabel']->tipe == 'radar'){
+        $tipe = $data['table']['tabel']->tipe;
+        if($tipe == 'pie' || $tipe == 'radar'){
             return view('grafik_pie', $data);
         }else{
             return view('grafik', $data);
@@ -40,5 +42,17 @@ class Graph extends Controller
         $tabel->save();
 
         return redirect()->back()->with('alert', 'Berhasil mengubah pengaturan');
+    }
+    public function urutkan(Request $req){
+        $req->validate([
+            'id_tabel' => 'required|exists:tabel,id',
+            'id_kolom' => 'required|exists:kolom,id',
+            'urutan' => 'required',
+        ]);
+
+        $baris = new Baris();
+        $baris->urutkan($req->id_tabel, $req->id_kolom, $req->urutan);
+
+        return redirect()->back()->with('alert', 'Berhasil mengurutkan data');
     }
 }

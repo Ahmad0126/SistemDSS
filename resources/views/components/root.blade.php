@@ -86,7 +86,7 @@
                                 <a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#"
                                     aria-expanded="false">
                                     <div class="avatar-sm">
-                                        <img src="public/assets/img/profile.jpg" alt="..."
+                                        <img src="{{ Vite::asset('resources/img/unknown.png') }}" alt="..."
                                             class="avatar-img rounded-circle" />
                                     </div>
                                     <span class="profile-username">
@@ -98,7 +98,7 @@
                                         <li>
                                             <div class="user-box">
                                                 <div class="avatar-lg">
-                                                    <img src="public/assets/img/profile.jpg" alt="image profile"
+                                                    <img src="{{ Vite::asset('resources/img/unknown.png') }}" alt="image profile"
                                                         class="avatar-img rounded" />
                                                 </div>
                                                 <div class="u-text text-white">
@@ -109,8 +109,8 @@
                                         </li>
                                         <li>
                                             <div class="dropdown-divider"></div>
-                                            <a href="profile.html" class="dropdown-item">
-                                                View Profile
+                                            <a href="{{ route('change_password') }}" class="dropdown-item">
+                                               Ganti Password
                                             </a>
                                             <form action="{{ route('logout') }}" method="post">
                                                 @csrf

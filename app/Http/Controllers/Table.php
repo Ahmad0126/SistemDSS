@@ -27,6 +27,7 @@ class Table extends Controller
         $kolom = new Kolom();
         $kolom->id_tabel = $req->id;
         $kolom->nama = $req->nama;
+        $kolom->tipe_data = $req->tipe_data ?? 'text';
         $kolom->urutan = $kolom->get_urutan($req->id, $req->urutan);
         $kolom->save();
 
@@ -110,7 +111,7 @@ class Table extends Controller
             $baris->where('urutan', $req->from)->get();
         }
 
-        ddd($baris);
+        $baris = $baris->get();
 
         foreach($baris as $b){
             Data::destroy(Data::where('id_baris', $b->id)->get());

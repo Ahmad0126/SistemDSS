@@ -19,6 +19,7 @@ class Home extends Controller
         $data['title'] = 'Dashboard';
         return view('home', $data);
     }
+
     public function login(Request $req):RedirectResponse{
         $user = $req->validate([
             'email' => 'required',
@@ -27,7 +28,7 @@ class Home extends Controller
 
         if(Auth::attempt($user)){
             $req->session()->regenerate();
-            return redirect(route('base'));
+            return redirect()->intended();
         }
 
         return back()->withErrors([
@@ -54,7 +55,7 @@ class Home extends Controller
 
         Auth::login($user);
         $req->session()->regenerate();
-        return redirect(route('base'));
+        return redirect()->intended();
     }
     public function logout(Request $request): RedirectResponse{
         Auth::logout();
@@ -65,6 +66,27 @@ class Home extends Controller
     
         return redirect('/login');
     }
+    public function ganti_password(Request $req){
+        $req->validate([
+            'password_lama' => 'required',
+            'password_baru' => 'required',
+            'password_konfirmasi' => 'required',
+        ]);
+
+        if(!Hash::check($req->password_lama, Auth::user()->password)){
+            return back()->withErrors('Password Lama Salah!')->withInput();
+        }
+        if($req->password_baru != $req->password_konfirmasi){
+            return back()->withErrors('Konfirmasi Password Baru Kembali')->withInput();
+        }
+
+        $user = User::find(Auth::user()->id);
+        $user->password = Hash::make($req->password_baru);
+        $user->save();
+
+        return redirect()->intended()->with('alert', 'Berhasil Mengubah Password');
+    }
+
     public function tabel($id){
         $tabel = new Tabel();
         $data['table'] = $tabel->getData($id);
@@ -87,7 +109,7 @@ class Home extends Controller
         $tabel->mb = 6;
         $tabel->save();
 
-        return redirect()->back()->with('alert', 'Berhasil menambah tabel');
+        return redirect()->back()->with('alert', 'Berhasil menambah project');
     }
     public function edit(Request $req){
         $req->validate([
@@ -99,7 +121,7 @@ class Home extends Controller
         $tabel->nama = $req->nama;
         $tabel->save();
 
-        return redirect()->back()->with('alert', 'Berhasil mengedit tabel');
+        return redirect()->back()->with('alert', 'Berhasil mengedit project');
     }
     public function hapus($id){
         $row = Baris::where('id_tabel', $id)->get();
@@ -112,6 +134,6 @@ class Home extends Controller
         Kolom::destroy($col);
         Tabel::destroy($id);
         
-        return redirect()->back()->with('alert', 'Berhasil menghapus tabel');
+        return redirect()->back()->with('alert', 'Berhasil menghapus project');
     }
 }

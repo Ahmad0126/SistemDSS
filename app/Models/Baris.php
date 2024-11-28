@@ -53,4 +53,18 @@ class Baris extends Model
 
         return $urutan;
     }
+    public function urutkan($id_tabel, $id_kolom, $urutan){
+        $data = DB::table($this->table, 'b')
+            ->select('b.id')
+            ->leftJoin(DB::raw('data d'), 'd.id_baris', '=', DB::raw('b.id AND d.id_kolom = '.$id_kolom))
+            ->where('id_tabel', $id_tabel)
+            ->orderBy(DB::raw('d.data'), $urutan)->get();
+        
+        $n = 1;
+        foreach($data as $row){
+            $baris = self::find($row->id);
+            $baris->urutan = $n++;
+            $baris->save();
+        }
+    }
 }

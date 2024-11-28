@@ -27,7 +27,11 @@ Route::middleware('guest')->group(function(){
 
 Route::middleware('auth')->group(function(){
     Route::get('/', [Home::class, 'index'])->name('base');
+    Route::get('/password', function(){
+        return view('ganti_password');
+    })->name('change_password');
     Route::post('/logout', [Home::class, 'logout'])->name('logout');
+    Route::post('/ganti_password', [Home::class, 'ganti_password'])->name('ganti_password');
 
     Route::get('/hapus/{id}', [Home::class, 'hapus'])->name('hapus_tabel');
     Route::post('/tambah', [Home::class, 'tambah'])->name('tambah_tabel');
@@ -56,6 +60,7 @@ Route::middleware('auth')->group(function(){
     
     Route::get('/grafik/{id}', [Graph::class, 'show'])->name('grafik');
     Route::post('/grafik/simpan', [Graph::class, 'simpan'])->name('simpan_grafik');
+    Route::post('/grafik/urutkan', [Graph::class, 'urutkan'])->name('urutkan_grafik');
 });
 
 Route::get('reactor/', function () {

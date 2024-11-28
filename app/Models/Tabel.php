@@ -112,7 +112,7 @@ class Tabel extends Model
             ]);
         }
         array_push($series, [
-            'name' => $kolom->nama,
+            'name' => $kolom->nama ?? '',
             'type' => 'pie',
             'data' => $s_data
         ]);

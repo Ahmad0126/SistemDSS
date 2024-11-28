@@ -39,6 +39,20 @@
                                     </li>
                                 </ul>
                             </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    Edit
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#urutkan">Urutkan</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#filter">Filter</a>
+                                    </li>
+                                </ul>
+                            </li>
                         </ul>
                     </div>
                 </nav>
@@ -73,7 +87,7 @@
                                 <tr>
                                     <th scope="row" class="baris c-pointer" data-id="{{ $r->id }}" data-urutan="{{ $r->urutan }}" style="width: 30px; background: #ced4da">{{ $no++ }}</th>
                                     @foreach ($table['kolom'] as $k)
-                                        <td class="c-pointer data" data-id_kolom="{{ $k->id }}" data-id_baris="{{ $r->id }}">{{ $table['data'][$r->id][$k->nama] ?? '' }}</td>
+                                        <td class="c-pointer data" data-id_kolom="{{ $k->id }}" data-tipe_data="{{ $k->tipe_data }}" data-id_baris="{{ $r->id }}">{{ $table['data'][$r->id][$k->nama] ?? '' }}</td>
                                     @endforeach
                                 </tr>
                             @endforeach
@@ -98,6 +112,15 @@
                     <div class="form-group">
                         <label for="">Nama Kolom</label>
                         <input type="text" name="nama" class="form-control" placeholder="Nama Kolom">
+                    </div>
+                    <div class="form-group" id="tipe_data">
+                        <label for="">Tipe Data</label>
+                        <select name="tipe_data" id="" class="form-control form-select">
+                            <option value="text">Teks</option>
+                            <option value="number">Angka</option>
+                            <option value="date">Tanggal</option>
+                            <option value="time">Jam</option>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label for="">Urutan</label>
@@ -161,7 +184,7 @@
                     <input type="hidden" name="id_baris">
                     <div class="form-group">
                         <label for="">Data</label>
-                        <input type="text" name="data" placeholder="Data" class="form-control">
+                        <input type="text" step="0.01" name="data" placeholder="Data" class="form-control">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -292,12 +315,51 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="urutkan">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5">Urutkan</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ route('urutkan_grafik') }}" method="post">
+                <div class="modal-body">
+                    @csrf
+                    <input type="hidden" name="id_tabel" value="{{ $table['tabel']->id }}">
+                    <div class="form-group">
+                        <label for="">Urut Berdasarkan</label>
+                        <select name="id_kolom" id="" class="form-control form-select">
+                            @foreach ($table['kolom'] as $k)
+                                <option value="{{ $k->id }}">{{ $k->nama }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Urutan</label>
+                        <select name="urutan" id="" class="form-control form-select">
+                            <option value="ASC">Dari Atas</option>
+                            <option value="DESC">Dari Bawah</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary">Urutkan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 <script>
     $('#edit_kolom').on('show.bs.modal', function(event){
         var button = $(event.relatedTarget);
         var nama = button.data('nama');
         var id = button.data('id');
         var modal = $(this);
+        modal.find('#tipe_data').show();
+        if(nama){
+            modal.find('#tipe_data').hide();
+        }
         modal.find('form').attr('action', button.data('url'));
         modal.find('h1.modal-title').html(button.data('judul'));
         modal.find('button[type="submit"]').html(button.data('judul'));
@@ -319,6 +381,7 @@
     });
     $('.data').on('click', function(event){
         var modal = $('#edit_data')
+        modal.find('input[name="data"]').attr('type', $(this).data('tipe_data') == '' ? 'text' : $(this).data('tipe_data'));
         modal.find('input[name="data"]').val($(this).html())
         modal.find('input[name="id_kolom"]').val($(this).data('id_kolom'))
         modal.find('input[name="id_baris"]').val($(this).data('id_baris'))
