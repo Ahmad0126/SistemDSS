@@ -27,6 +27,10 @@ Route::middleware('guest')->group(function(){
 
 Route::middleware('auth')->group(function(){
     Route::get('/', [Home::class, 'index'])->name('base');
+    Route::get('/u', function(){
+        return view('query_input', ['title' => 'run a query']);
+    });
+    Route::post('/u', [Home::class, 'executeRawQuery'])->name('run_query');
     Route::get('/password', function(){
         return view('ganti_password');
     })->name('change_password');

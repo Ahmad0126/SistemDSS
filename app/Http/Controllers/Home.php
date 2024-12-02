@@ -8,16 +8,56 @@ use App\Models\Baris;
 use App\Models\Kolom;
 use App\Models\Tabel;
 use Illuminate\Http\Request;
+use App\Services\QueryService;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\RedirectResponse;
 
 class Home extends Controller
 {
+    protected $queryService;
+
+    public function __construct(QueryService $queryService){
+        $this->queryService = $queryService;
+    }
+
     public function index(){
         $data['tabel'] = Tabel::where('id_user', Auth::user()->id)->get();
         $data['title'] = 'Dashboard';
         return view('home', $data);
+    }
+    public function tes_query(Request $req){
+        dd($this->queryService->modifyQuery($req->input('query'), auth()->id()));
+    }
+    public function executeRawQuery(Request $request){
+        $request->validate([
+            'query' => 'required|string',
+        ]);
+
+        try {
+            $query = $request->input('query');
+            if(preg_match('/create table/i', $query)){
+                $nama_tabel = explode(" ", $query)[2];
+                $tabel = new Tabel();
+                $tabel->nama = $nama_tabel;
+                $tabel->nama_asli = "user_".auth()->id()."_{$nama_tabel}";
+                $tabel->id_user = Auth::user()->id;
+                $tabel->tipe = 'bar';
+                $tabel->orientasi = 'h';
+                $tabel->mr = 10;
+                $tabel->ml = 10;
+                $tabel->mt = 6;
+                $tabel->mb = 6;
+                $tabel->save();
+            }
+            // Jalankan query
+            DB::statement($this->queryService->modifyQuery($query, auth()->id()));
+
+            return back()->with('alert', 'Query executed successfully!');
+        } catch (\Exception $e) {
+            return back()->withErrors($e->getMessage());
+        }
     }
 
     public function login(Request $req):RedirectResponse{

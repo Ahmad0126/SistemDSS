@@ -146,7 +146,7 @@
                         align: 'right',
                     },
                     time: 1000,
-                    delay: 3000,
+                    delay: 6000,
                 });
             @endforeach
         @endif
@@ -162,7 +162,7 @@
                     align: 'right',
                 },
                 time: 1000,
-                delay: 3000,
+                delay: 6000,
             });
         @endif
     </script>
