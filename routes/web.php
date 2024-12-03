@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Graph;
 use App\Http\Controllers\Home;
+use App\Http\Controllers\Query;
 use App\Http\Controllers\Table;
 use App\Http\Controllers\User;
 use Illuminate\Support\Facades\Route;
@@ -27,10 +28,6 @@ Route::middleware('guest')->group(function(){
 
 Route::middleware('auth')->group(function(){
     Route::get('/', [Home::class, 'index'])->name('base');
-    Route::get('/u', function(){
-        return view('query_input', ['title' => 'run a query']);
-    });
-    Route::post('/u', [Home::class, 'executeRawQuery'])->name('run_query');
     Route::get('/password', function(){
         return view('ganti_password');
     })->name('change_password');
@@ -40,6 +37,10 @@ Route::middleware('auth')->group(function(){
     Route::get('/hapus/{id}', [Home::class, 'hapus'])->name('hapus_tabel');
     Route::post('/tambah', [Home::class, 'tambah'])->name('tambah_tabel');
     Route::post('/edit', [Home::class, 'edit'])->name('edit_tabel');
+
+    Route::get('/query', [Query::class, 'index'])->name('query');
+    Route::get('/query/result', [Query::class, 'result'])->name('result_query');
+    Route::post('/query/run', [Query::class, 'execute'])->name('run_query');
     
     Route::middleware('can:admin')->group(function(){
         Route::get('/user', [User::class, 'index'])->name('user');
