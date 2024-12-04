@@ -51,16 +51,28 @@
 
 <body>
     <div class="wrapper">
-        <div class="main-panel w-100">
-            <div class="main-header w-100" data-background-color="dark">
+        {{ $sidebar ?? '' }}
+        <div class="main-panel {{ isset($sidebar) ? '' : 'w-100' }}">
+            <div class="main-header {{ isset($sidebar) ? '' : 'w-100' }}" data-background-color="dark">
                 <div class="main-header-logo">
                     <!-- Logo Header -->
                     <div class="logo-header" data-background-color="dark">
+                        <a href="{{ route('base') }}" class="logo text-white">
+                            <h1 class="mb-0">SistemDSS</h1>
+                        </a>
                         <div class="nav-toggle">
-                            <button class="btn btn-toggle topbar-toggler">
+                            @isset($sidebar) 
+                            <button class="btn btn-toggle toggle-sidebar">
+                                <i class="gg-menu-right"></i>
+                            </button>
+                            <button class="btn btn-toggle sidenav-toggler">
                                 <i class="gg-menu-left"></i>
                             </button>
+                            @endisset
                         </div>
+                        <button class="topbar-toggler more">
+                            <i class="{{ isset($sidebar) ? 'gg-more-vertical-alt' : 'gg-menu-right' }}"></i>
+                        </button>
                     </div>
                     <!-- End Logo Header -->
                 </div>
@@ -77,10 +89,13 @@
                                 </li>
                             @endcan
                             <li class="nav-item">
-                                <a class="nav-link" href="#">Project</a>
+                                <a class="nav-link" href="{{ route('database') }}">Database</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">Template</a>
+                                <a class="nav-link" href="{{ route('query') }}">Query</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Grafik</a>
                             </li>
                             <li class="nav-item topbar-user dropdown hidden-caret ms-md-auto">
                                 <a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#"
@@ -157,6 +172,21 @@
                 icon: 'fas fa-check',
             }, {
                 type: 'success',
+                placement: {
+                    from: 'top',
+                    align: 'right',
+                },
+                time: 1000,
+                delay: 6000,
+            });
+        @endif
+        @if ($notif = Session::get('error'))
+            $.notify({
+                title: 'FAILED',
+                message: '{{ $notif }}',
+                icon: 'fas fa-exclamation-triangle',
+            }, {
+                type: 'danger',
                 placement: {
                     from: 'top',
                     align: 'right',

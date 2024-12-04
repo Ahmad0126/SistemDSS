@@ -1,9 +1,9 @@
-<div class="sidebar" data-background-color="dark">
+<div class="sidebar" data-background-color="white">
     <div class="sidebar-logo">
         <!-- Logo Header -->
         <div class="logo-header" data-background-color="dark">
-            <a href="index.html" class="logo">
-                <img src="{{ Vite::asset('resources/img/kaiadmin/logo_light.svg') }}" alt="navbar brand" class="navbar-brand" height="20" />
+            <a href="{{ route('base') }}" class="logo text-white">
+                <h1 class="mb-0">SistemDSS</h1>
             </a>
             <div class="nav-toggle">
                 <button class="btn btn-toggle toggle-sidebar">
@@ -23,18 +23,29 @@
         <div class="sidebar-content">
             <ul class="nav nav-secondary">
                 <li class="nav-item">
-                    <a href="{{ route('base') }}">
-                        <i class="fas fa-home"></i>
-                        <p>Dashboard</p>
+                    <a href="{{ route('database') }}">
+                        <i class="fas fa-layer-group"></i>
+                        <p>Database</p>
                     </a>
                 </li>
-                <li class="nav-section">
-                    <span class="sidebar-mini-icon">
-                        <i class="fa fa-ellipsis-h"></i>
-                    </span>
-                    <h4 class="text-section">MENU</h4>
+                <li class="nav-item">
+                    <a data-bs-toggle="collapse" href="#table">
+                        <i class="fas fa-table"></i>
+                        <p>Tabel</p>
+                        <span class="caret"></span>
+                    </a>
+                    <div class="collapse" id="table">
+                        <ul class="nav nav-collapse">
+                            @foreach ($table as $t)
+                                <li>
+                                    <a href="{{ route('tabel', $t->id) }}">
+                                        <span class="sub-item">{{ $t->nama }}</span>
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
                 </li>
-                {{ $slot }}
             </ul>
         </div>
     </div>

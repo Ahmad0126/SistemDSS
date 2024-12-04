@@ -34,9 +34,10 @@ Route::middleware('auth')->group(function(){
     Route::post('/logout', [Home::class, 'logout'])->name('logout');
     Route::post('/ganti_password', [Home::class, 'ganti_password'])->name('ganti_password');
 
-    Route::get('/hapus/{id}', [Home::class, 'hapus'])->name('hapus_tabel');
-    Route::post('/tambah', [Home::class, 'tambah'])->name('tambah_tabel');
-    Route::post('/edit', [Home::class, 'edit'])->name('edit_tabel');
+    Route::get('/mydatabase', [Table::class, 'index'])->name('database');
+    Route::get('/mydatabase/hapus/{id}', [Home::class, 'hapus'])->name('hapus_tabel');
+    Route::post('/mydatabase/tambah', [Home::class, 'tambah'])->name('tambah_tabel');
+    Route::post('/mydatabase/edit', [Home::class, 'edit'])->name('edit_tabel');
 
     Route::get('/query', [Query::class, 'index'])->name('query');
     Route::get('/query/result', [Query::class, 'result'])->name('result_query');

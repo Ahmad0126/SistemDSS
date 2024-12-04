@@ -6,11 +6,17 @@ use App\Models\Baris;
 use App\Models\Data;
 use App\Models\Kolom;
 use App\Models\Tabel;
+use App\Models\UserTabel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class Table extends Controller
 {
+    public function index(){
+        $data['tabel'] = UserTabel::where('id_user', auth()->id())->get();
+        $data['title'] = 'Menu Database';
+        return view('database', $data);
+    }
     public function struktur($id){
         $data['kolom'] = Kolom::where('id_tabel', $id)->orderBy('urutan')->get();
         $data['tabel'] = Tabel::find($id);

@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Baris;
 use App\Models\Kolom;
 use App\Models\Tabel;
+use App\Models\UserTabel;
 use Illuminate\Http\Request;
 use App\Services\QueryService;
 use Illuminate\Support\Facades\DB;
@@ -128,9 +129,14 @@ class Home extends Controller
     }
 
     public function tabel($id){
-        $tabel = new Tabel();
-        $data['table'] = $tabel->getData($id);
-        $data['title'] = 'Tabel '.$data['table']['tabel']->nama;
+        $tabel = UserTabel::find($id);
+        $result = DB::table($tabel->nama_asli)->get();
+        $result = json_decode(json_encode($result), true);
+
+        $data['kolom'] = empty($result) ? [] : array_keys($result[0]);
+        $data['baris'] = $result;
+        $data['tabel'] = UserTabel::where('id_user', auth()->id())->get();
+        $data['title'] = 'Tabel '.$tabel->nama;
         return view('tabel', $data);
     }
     public function tambah(Request $req){
@@ -138,18 +144,7 @@ class Home extends Controller
             'nama' => 'required'
         ]);
 
-        $tabel = new Tabel();
-        $tabel->nama = $req->nama;
-        $tabel->id_user = Auth::user()->id;
-        $tabel->tipe = 'bar';
-        $tabel->orientasi = 'h';
-        $tabel->mr = 10;
-        $tabel->ml = 10;
-        $tabel->mt = 6;
-        $tabel->mb = 6;
-        $tabel->save();
-
-        return redirect()->back()->with('alert', 'Berhasil menambah project');
+        return UserTabel::buat_tabel($req->nama, true);
     }
     public function edit(Request $req){
         $req->validate([
@@ -157,23 +152,9 @@ class Home extends Controller
             'id' => 'required:tabel,id'
         ]);
 
-        $tabel = Tabel::find($req->id);
-        $tabel->nama = $req->nama;
-        $tabel->save();
-
-        return redirect()->back()->with('alert', 'Berhasil mengedit project');
+        return UserTabel::rename_tabel($req->nama, $req->id, true);
     }
     public function hapus($id){
-        $row = Baris::where('id_tabel', $id)->get();
-        $col = Kolom::where('id_tabel', $id)->get();
-        foreach($row as $baris){
-            $data = Data::where('id_baris', $baris->id)->get();
-            Data::destroy($data);
-        }
-        Baris::destroy($row);
-        Kolom::destroy($col);
-        Tabel::destroy($id);
-        
-        return redirect()->back()->with('alert', 'Berhasil menghapus project');
+        return UserTabel::drop_tabel($id, true);
     }
 }
