@@ -108,6 +108,7 @@ class UserTabel extends Model
     }
 
     public static function modifyQuery($query, $nama_tabel = null){
+        $qu = $query;
         if($nama_tabel){
             $qu = str_replace(" {$nama_tabel}", " user_".auth()->id()."_{$nama_tabel}", $query);
         }else{
@@ -123,6 +124,10 @@ class UserTabel extends Model
                 $qu = str_replace(" {$t}", " user_".auth()->id()."_{$t}", $query);
                 if($qu != $query){ break; }
             }
+            //cek apakah user mengakses tabel user lain
+            $qu = preg_replace_callback('/(user_\d+)/', function($matches) {
+                return "user_".auth()->id().'_' . $matches[0]; // Tambahkan "$_" di awal
+            }, $query);
         }
 
         return $qu;

@@ -15,13 +15,17 @@ class Query extends Controller
     }
     public function result(){
         try {
-            $result = DB::select(UserTabel::modifyQuery(session('query')));
-            $result = json_decode(json_encode($result), true);
+            $result = null;
+            if(session('query')){
+                $result = DB::select(UserTabel::modifyQuery(session('query')));
+                $result = json_decode(json_encode($result), true);
+                session()->flash('alert', 'Query berhasil dijalankan');
+            }else{
+                session()->flash('error', "Masukkan query terlebih dahulu");
+            }
 
             $data['kolom'] = empty($result) ? [] : array_keys($result[0]);
             $data['baris'] = $result;
-            
-            session()->flash('alert', 'Query berhasil dijalankan');
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
         }

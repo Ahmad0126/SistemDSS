@@ -32,25 +32,31 @@
                     <div class="card-body" style="max-height: 435px; overflow-y: scroll">
                         @csrf
                         <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="">Query</label>
+                                    <textarea id="query" name="query" class="form-control" rows="5" placeholder="Masukkan Query Anda">{{ $grafik->query }} </textarea>
+                                </div>
+                            </div>
                             <div class="col-md-6 col-lg-12">
                                 <div class="form-group">
                                     <label for="">Tipe Grafik</label>
                                     <select name="tipe" id="" class="form-control form-select">
-                                        <option @selected($table['tabel']->tipe == 'bar') value="bar">Bar</option>
-                                        <option @selected($table['tabel']->tipe == 'line') value="line">Line</option>
-                                        <option @selected($table['tabel']->tipe == 'scatter') value="scatter">Scatter</option>
-                                        <option @selected($table['tabel']->tipe == 'pie') value="pie">Pie</option>
-                                        <option @selected($table['tabel']->tipe == 'radar') value="radar">Radar</option>
+                                        <option @selected($grafik->tipe == 'bar') value="bar">Bar</option>
+                                        <option @selected($grafik->tipe == 'line') value="line">Line</option>
+                                        <option @selected($grafik->tipe == 'scatter') value="scatter">Scatter</option>
+                                        <option @selected($grafik->tipe == 'pie') value="pie">Pie</option>
+                                        <option @selected($grafik->tipe == 'radar') value="radar">Radar</option>
                                     </select>
-                                    <input type="hidden" name="id" value="{{ $table['tabel']->id }}">
+                                    <input type="hidden" name="id" value="{{ $grafik->id }}">
                                 </div>
                             </div>
                             <div class="col-md-6 col-lg-12">
                                 <div class="form-group">
                                     <label for="">Orientasi</label>
                                     <select name="orientasi" id="" class="form-control form-select">
-                                        <option @selected($table['tabel']->orientasi == 'h') value="h">Horizontal</option>
-                                        <option @selected($table['tabel']->orientasi == 'v') value="v">Vertikal</option>
+                                        <option @selected($grafik->orientasi == 'h') value="h">Horizontal</option>
+                                        <option @selected($grafik->orientasi == 'v') value="v">Vertikal</option>
                                     </select>
                                 </div>
                             </div>
@@ -59,11 +65,11 @@
                                     <div class="row align-items-center">
                                         <div class="col-7">
                                             <label for="">Margin Kanan</label>
-                                            <input type="range" class="form-range" min="0" max="100" name="mr" id="mr" value="{{ $table['tabel']->mr }}">
+                                            <input type="range" class="form-range" min="0" max="100" name="mr" id="mr" value="{{ $grafik->mr }}">
                                         </div>
                                         <div class="col-5">
                                             <div class="input-group">
-                                                <input type="number" min="0" max="100" name="" id="lmr" class="form-control" value="{{ $table['tabel']->mr }}">
+                                                <input type="number" min="0" max="100" name="" id="lmr" class="form-control" value="{{ $grafik->mr }}">
                                                 <span class="input-group-text">%</span>
                                             </div>
                                         </div>
@@ -75,11 +81,11 @@
                                     <div class="row align-items-center">
                                         <div class="col-7">
                                             <label for="">Margin Kiri</label>
-                                            <input id="ml" type="range" class="form-range" min="0" max="100" name="ml" value="{{ $table['tabel']->ml }}">
+                                            <input id="ml" type="range" class="form-range" min="0" max="100" name="ml" value="{{ $grafik->ml }}">
                                         </div>
                                         <div class="col-5">
                                             <div class="input-group">
-                                                <input id="lml" type="number" min="0" max="100" name="" class="form-control" value="{{ $table['tabel']->ml }}">
+                                                <input id="lml" type="number" min="0" max="100" name="" class="form-control" value="{{ $grafik->ml }}">
                                                 <span class="input-group-text">%</span>
                                             </div>
                                         </div>
@@ -91,11 +97,11 @@
                                     <div class="row align-items-center">
                                         <div class="col-7">
                                             <label for="">Margin Atas</label>
-                                            <input id="mt" type="range" class="form-range" min="0" max="100" name="mt" value="{{ $table['tabel']->mt }}">
+                                            <input id="mt" type="range" class="form-range" min="0" max="100" name="mt" value="{{ $grafik->mt }}">
                                         </div>
                                         <div class="col-5">
                                             <div class="input-group">
-                                                <input id="lmt" type="number" min="0" max="100" name="" class="form-control" value="{{ $table['tabel']->mt }}">
+                                                <input id="lmt" type="number" min="0" max="100" name="" class="form-control" value="{{ $grafik->mt }}">
                                                 <span class="input-group-text">%</span>
                                             </div>
                                         </div>
@@ -107,11 +113,11 @@
                                     <div class="row align-items-center">
                                         <div class="col-7">
                                             <label for="">Margin Bawah</label>
-                                            <input id="mb" type="range" class="form-range" min="0" max="100" name="mb" value="{{ $table['tabel']->mb }}">
+                                            <input id="mb" type="range" class="form-range" min="0" max="100" name="mb" value="{{ $grafik->mb }}">
                                         </div>
                                         <div class="col-5">
                                             <div class="input-group">
-                                                <input id="lmb" type="number" min="0" max="100" name="" class="form-control" value="{{ $table['tabel']->mb }}">
+                                                <input id="lmb" type="number" min="0" max="100" name="" class="form-control" value="{{ $grafik->mb }}">
                                                 <span class="input-group-text">%</span>
                                             </div>
                                         </div>
@@ -125,7 +131,22 @@
         </div>
     </div>
 
-    <x-data-table :table="$table"></x-data-table>
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-header p-0">
+                    <nav class="navbar navbar-expand-lg">
+                        <div class="container-fluid">
+                            <h3 class="navbar-brand mb-0 ms-2">Data</h3>
+                        </div>
+                    </nav>
+                </div>
+                <div class="card-body">
+                    <x-data-table :baris="$baris" :kolom="$kolom"></x-data-table>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Chart JS -->
     <script src="{{ Vite::asset('resources/js/plugin/apache-echarts/echarts.min.js') }}"></script>
@@ -159,7 +180,7 @@
         });
 
         // Initialize the echarts instance based on the prepared dom
-        var myChart = echarts.init(document.getElementById('barChart'));
+        {{-- var myChart = echarts.init(document.getElementById('barChart'));
 
         // Specify the configuration items and data for the chart
         var option = {
@@ -199,6 +220,6 @@
         myChart.setOption(option);
         $(window).on('resize', function(event) {
             myChart.resize();
-        })
+        }) --}}
     </script>
 </x-root>

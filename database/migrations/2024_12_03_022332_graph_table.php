@@ -23,7 +23,7 @@ return new class extends Migration
             $table->integer('id_user');
             $table->string('judul', 200);
             $table->string('tipe', 20);
-            $table->text('query');
+            $table->text('query')->nullable();
             $table->timestamps();
         });
         Schema::table('tabel', function(Blueprint $table){

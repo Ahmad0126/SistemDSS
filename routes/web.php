@@ -64,9 +64,14 @@ Route::middleware('auth')->group(function(){
     Route::post('/struktur/edit', [Table::class, 'edit_kolom'])->name('edit_kolom');
     Route::post('/struktur/hapus/', [Table::class, 'hapus_kolom'])->name('hapus_kolom');
     
+    Route::get('/grafik', [Graph::class, 'index'])->name('daftar_grafik');
     Route::get('/grafik/{id}', [Graph::class, 'show'])->name('grafik');
     Route::post('/grafik/simpan', [Graph::class, 'simpan'])->name('simpan_grafik');
     Route::post('/grafik/urutkan', [Graph::class, 'urutkan'])->name('urutkan_grafik');
+    Route::post('/grafik/query', [Graph::class, 'query'])->name('query_grafik');
+    Route::post('/grafik/tambah', [Graph::class, 'tambah'])->name('tambah_grafik');
+    Route::post('/grafik/edit', [Graph::class, 'edit'])->name('edit_grafik');
+    Route::get('/grafik/hapus/{id}', [Graph::class, 'hapus'])->name('hapus_grafik');
 });
 
 Route::get('reactor/', function () {

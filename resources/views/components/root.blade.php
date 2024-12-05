@@ -95,7 +95,7 @@
                                 <a class="nav-link" href="{{ route('query') }}">Query</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">Grafik</a>
+                                <a class="nav-link" href="{{ route('daftar_grafik') }}">Grafik</a>
                             </li>
                             <li class="nav-item topbar-user dropdown hidden-caret ms-md-auto">
                                 <a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#"

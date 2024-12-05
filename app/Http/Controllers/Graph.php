@@ -4,42 +4,88 @@ namespace App\Http\Controllers;
 
 use App\Models\Baris;
 use App\Models\Tabel;
+use App\Models\UserTabel;
+use App\Models\UserGrafik;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
 class Graph extends Controller
 {
+    public function index(){
+        $data['grafik'] = UserGrafik::where('id_user', auth()->id())->get();
+        $data['title'] = 'Daftar Grafik';
+        return view('daftar_grafik', $data);
+    }
     public function show($id){
-        if(!Gate::allows('private_project', $id)){
-            abort(403);
+        $grafik = UserGrafik::find($id);
+        try {
+            $result = [];
+            if($grafik->query){
+                $result = DB::select(UserTabel::modifyQuery($grafik->query));
+                $result = json_decode(json_encode($result), true);
+            }
+
+            $data['kolom'] = empty($result) ? [] : array_keys($result[0]);
+            $data['baris'] = $result;
+        } catch (\Exception $e) {
+            session()->flash('error', $e->getMessage());
         }
-        $tabel = new Tabel();
-       
-        $data = $tabel->get_grafik($id);
-        $data['title'] = $data['table']['tabel']->nama;
+
+        $data['grafik'] = $grafik;
+        $data['title'] = 'Grafik '.$grafik->judul;
+        return view('grafik', $data);
+    }
+
+    public function tambah(Request $req){
+        $req->validate([
+            'judul' => 'required',
+            'tipe' => 'required',
+        ]);
+
+        $grafik = new UserGrafik();
+        $grafik->id_user = auth()->id();
+        $grafik->judul = $req->judul;
+        $grafik->tipe = $req->tipe;
+        $grafik->save();
+
+        return redirect()->back()->with('alert', 'Berhasil membuat grafik');
+    }
+    public function edit(Request $req){
+        $req->validate([
+            'id' => 'required',
+            'judul' => 'required',
+            'tipe' => 'required',
+        ]);
+
+        $grafik = UserGrafik::find($req->id);
+        $grafik->judul = $req->judul;
+        $grafik->tipe = $req->tipe;
+        $grafik->save();
+
+        return redirect()->back()->with('alert', 'Berhasil mengedit grafik');
+    }
+    public function hapus($id){
+        UserGrafik::destroy($id);
         
-        $tipe = $data['table']['tabel']->tipe;
-        if($tipe == 'pie' || $tipe == 'radar'){
-            return view('grafik_pie', $data);
-        }else{
-            return view('grafik', $data);
-        }
+        return redirect()->back()->with('alert', 'Berhasil menghapus grafik');
     }
     public function simpan(Request $req){
         $req->validate([
-            'id' => 'required:tabel,id'
+            'id' => 'required:user_grafik,id'
         ]);
 
-        $tabel = Tabel::find($req->id);
-        $tabel->tipe = $req->tipe ?? $tabel->tipe;
-        $tabel->orientasi = $req->orientasi ?? $tabel->orientasi;
-        $tabel->mr = $req->mr ?? $tabel->mr;
-        $tabel->ml = $req->ml ?? $tabel->ml;
-        $tabel->mt = $req->mt ?? $tabel->mt;
-        $tabel->mb = $req->mb ?? $tabel->mb;
-        $tabel->max_sumbu = $req->max_sumbu ?? $tabel->max_sumbu;
-        $tabel->pie_kolom = $req->pie_kolom ?? $tabel->pie_kolom;
-        $tabel->save();
+        $grafik = UserGrafik::find($req->id);
+        $grafik->query = $req->input('query') ?? $grafik->query; //validasi hanya boleh query select
+        $grafik->tipe = $req->tipe ?? $grafik->tipe;
+        $grafik->orientasi = $req->orientasi ?? $grafik->orientasi;
+        $grafik->mr = $req->mr ?? $grafik->mr;
+        $grafik->ml = $req->ml ?? $grafik->ml;
+        $grafik->mt = $req->mt ?? $grafik->mt;
+        $grafik->mb = $req->mb ?? $grafik->mb;
+        $grafik->max_sumbu = $req->max_sumbu ?? $grafik->max_sumbu;
+        $grafik->pie_kolom = $req->pie_kolom ?? $grafik->pie_kolom;
+        $grafik->save();
 
         return redirect()->back()->with('alert', 'Berhasil mengubah pengaturan');
     }

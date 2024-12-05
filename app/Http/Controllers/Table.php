@@ -18,9 +18,12 @@ class Table extends Controller
         return view('database', $data);
     }
     public function struktur($id){
-        $data['kolom'] = Kolom::where('id_tabel', $id)->orderBy('urutan')->get();
-        $data['tabel'] = Tabel::find($id);
-        $data['title'] = 'Struktur Tabel '.$data['tabel']->nama;
+        $tabel = UserTabel::find($id);
+        $kolom = DB::select('show columns from '.$tabel->nama_asli);
+
+        $data['kolom'] = $kolom;
+        $data['tabel'] = UserTabel::where('id_user', auth()->id())->get();
+        $data['title'] = 'Struktur Tabel '.$tabel->nama;
         return view('struktur', $data);
     }
 
