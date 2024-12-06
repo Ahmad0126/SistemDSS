@@ -8,7 +8,11 @@
                     <div class="card-title">{{ $title }}</div>
                 </div>
                 <div class="card-body">
-                    <div class="chart-container" style="height: 400px" id="barChart"></div>
+                    @if ($query_error)
+                        <div class="alert alert-danger">{{ $query_error }}</div>
+                    @else
+                        <div class="chart-container" style="height: 400px" id="chart"></div>
+                    @endif
                 </div>
             </div>
         </div>
@@ -35,7 +39,7 @@
                             <div class="col">
                                 <div class="form-group">
                                     <label for="">Query</label>
-                                    <textarea id="query" name="query" class="form-control" rows="5" placeholder="Masukkan Query Anda">{{ $grafik->query }} </textarea>
+                                    <textarea id="query" name="query" class="form-control" rows="5" placeholder="Masukkan Select Query">{{ $grafik->query }}</textarea>
                                 </div>
                             </div>
                             <div class="col-md-6 col-lg-12">
@@ -142,7 +146,9 @@
                     </nav>
                 </div>
                 <div class="card-body">
-                    <x-data-table :baris="$baris" :kolom="$kolom"></x-data-table>
+                    @if (isset($kolom) && isset($baris))
+                        <x-data-table :baris="$baris" :kolom="$kolom"></x-data-table>
+                    @endif
                 </div>
             </div>
         </div>
@@ -179,47 +185,62 @@
             $('#mb').val($(this).val())
         });
 
-        // Initialize the echarts instance based on the prepared dom
-        {{-- var myChart = echarts.init(document.getElementById('barChart'));
+        // Data dari backend
+        const chartData = @json($baris ?? []);
+        const chartColumns = @json($kolom ?? []);
 
-        // Specify the configuration items and data for the chart
-        var option = {
-            tooltip: {
-                @if($table['tabel']->tipe == 'line')
-                trigger: 'axis'
+        if (chartData.length > 0 && chartColumns.length > 1) {
+            const chartDom = document.getElementById('chart');
+            const myChart = echarts.init(chartDom);
+
+            const option = {
+                // title: {
+                //     text: 'Query Chart'
+                // },
+                tooltip: {
+                    @if($grafik->tipe == 'line')
+                        trigger: 'axis'
+                    @endif
+                },
+                grid:{
+                    left: '{{ $grafik->ml ?? 0 }}%',
+                    right: '{{ $grafik->mr ?? 0 }}%',
+                    top: '{{ $grafik->mt ?? 0 }}%',
+                    bottom: '{{ $grafik->mb ?? 0 }}%',
+                },
+                legend: {},
+                dataset: {
+                    source: [
+                        chartColumns, // Baris pertama adalah nama kolom (header)
+                        ...chartData.map(row => chartColumns.map(col => row[col])) // Sisanya adalah data
+                    ]
+                },
+                @if ($grafik->orientasi == 'v')
+                    xAxis: { type: 'value' },
+                    yAxis: { type: 'category' },
+                    series: chartColumns.slice(1).map(col => ({
+                        type: 'bar',
+                        name: col,
+                        encode: { y: chartColumns[0], x: col }
+                    }))
+                @else
+                    xAxis: { type: 'category' },
+                    yAxis: { type: 'value' },
+                    series: chartColumns.slice(1).map(col => ({
+                        type: 'bar',
+                        name: col,
+                        encode: { x: chartColumns[0], y: col }
+                    }))
                 @endif
-            },
-            grid:{
-                left: '{{ $table['tabel']->ml }}%',
-                right: '{{ $table['tabel']->mr }}%',
-                top: '{{ $table['tabel']->mt }}%',
-                bottom: '{{ $table['tabel']->mb }}%',
-            },
-            legend: {},
+            };
 
-            @if ($table['tabel']->orientasi == 'v')
-                xAxis: {
-                    type: 'value',
-                    boundaryGap: [0, 0.01]
-                },
-                yAxis: {
-                    type: 'category',
-                    data: @php echo json_encode($data); @endphp
-                },
-            @else
-                xAxis: {
-                    data: @php echo json_encode($data); @endphp
-                },
-                yAxis: {},
-            @endif
-
-            series: @php echo json_encode($series); @endphp
-        };
-
-        // Display the chart using the configuration items and data just specified.
-        myChart.setOption(option);
+            myChart.setOption(option);
+        } else {
+            document.getElementById('chart').innerHTML = '<p class="text-danger">Insufficient data to render chart.</p>';
+        }
+        
         $(window).on('resize', function(event) {
             myChart.resize();
-        }) --}}
+        })
     </script>
 </x-root>

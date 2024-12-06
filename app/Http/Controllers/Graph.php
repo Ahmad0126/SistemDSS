@@ -19,6 +19,7 @@ class Graph extends Controller
     }
     public function show($id){
         $grafik = UserGrafik::find($id);
+        $data['query_error'] = null;
         try {
             $result = [];
             if($grafik->query){
@@ -29,7 +30,7 @@ class Graph extends Controller
             $data['kolom'] = empty($result) ? [] : array_keys($result[0]);
             $data['baris'] = $result;
         } catch (\Exception $e) {
-            session()->flash('error', $e->getMessage());
+            $data['query_error'] = $e->getMessage();
         }
 
         $data['grafik'] = $grafik;
@@ -76,7 +77,13 @@ class Graph extends Controller
         ]);
 
         $grafik = UserGrafik::find($req->id);
-        $grafik->query = $req->input('query') ?? $grafik->query; //validasi hanya boleh query select
+        $query = $req->input('query');
+        if($query){
+            if(!(mb_stripos($query, 'select') === 0)){
+                return redirect()->back()->withErrors('Hanya boleh memasukkan query SELECT');
+            }
+            $grafik->query = $req->input('query');
+        }
         $grafik->tipe = $req->tipe ?? $grafik->tipe;
         $grafik->orientasi = $req->orientasi ?? $grafik->orientasi;
         $grafik->mr = $req->mr ?? $grafik->mr;
