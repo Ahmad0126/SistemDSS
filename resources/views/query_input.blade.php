@@ -24,4 +24,19 @@
             </div>
         </div>
     </div>
+    @if (session('query_error') || session('alert'))
+        <div class="row">
+            <div class="col">
+                @if (session('query_error'))
+                    <div class="alert alert-danger">
+                        {{ session('query_error') }}
+                    </div>
+                @else
+                    <div class="alert alert-success">
+                        {{ session('alert') }}
+                    </div>
+                @endif
+            </div>
+        </div>
+    @endif
 </x-root>

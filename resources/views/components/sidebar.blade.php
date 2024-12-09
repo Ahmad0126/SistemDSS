@@ -34,7 +34,7 @@
                         <p>Tabel</p>
                         <span class="caret"></span>
                     </a>
-                    <div class="collapse" id="table">
+                    <div class="collapse show" id="table">
                         <ul class="nav nav-collapse">
                             @foreach ($table as $t)
                                 <li>

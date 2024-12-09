@@ -209,38 +209,66 @@
                     bottom: '{{ $grafik->mb ?? 0 }}%',
                 },
                 legend: {},
-                dataset: {
-                    source: [
-                        chartColumns, // Baris pertama adalah nama kolom (header)
-                        ...chartData.map(row => chartColumns.map(col => row[col])) // Sisanya adalah data
-                    ]
-                },
-                @if ($grafik->orientasi == 'v')
-                    xAxis: { type: 'value' },
-                    yAxis: { type: 'category' },
-                    series: chartColumns.slice(1).map(col => ({
-                        type: 'bar',
-                        name: col,
-                        encode: { y: chartColumns[0], x: col }
-                    }))
+                @if ($grafik->tipe == 'radar')
+                    radar: {
+                        indicator: chartColumns.slice(1).map(col => ({
+                            name: col, // Nama sumbu berdasarkan nama kolom
+                            max: 100   // Maksimum nilai sumbu (bisa diatur dinamis)
+                        }))
+                    },
+                    series: {
+                        type: 'radar',
+                        data: chartData.map(row => ({
+                            value: chartColumns.slice(1).map(col => row[col]), // Ambil nilai setiap metrik
+                            name: row[chartColumns[0]] // Ambil nama kategori (baris pertama)
+                        }))
+                    },
                 @else
-                    xAxis: { type: 'category' },
-                    yAxis: { type: 'value' },
-                    series: chartColumns.slice(1).map(col => ({
-                        type: 'bar',
-                        name: col,
-                        encode: { x: chartColumns[0], y: col }
-                    }))
+                    dataset: {
+                        source: [
+                            chartColumns, // Baris pertama adalah nama kolom (header)
+                            ...chartData.map(row => chartColumns.map(col => row[col])) // Sisanya adalah data
+                        ]
+                    },
+                    @if ($grafik->orientasi == 'v')
+                        @if ($grafik->tipe != 'pie' && $grafik->tipe != 'radar')
+                            xAxis: { type: 'value' },
+                            yAxis: { type: 'category' },
+                        @endif
+                        series: chartColumns.slice(1).map(col => ({
+                            type: '{{ $grafik->tipe ?? bar }}',
+                            name: col,
+                            @if ($grafik->tipe == 'pie')
+                                encode: { itemName: chartColumns[0], value: col }
+                            @else
+                                encode: { y: chartColumns[0], x: col }
+                            @endif
+                        }))
+                    @else
+                        @if ($grafik->tipe != 'pie' && $grafik->tipe != 'radar')
+                            xAxis: { type: 'category' },
+                            yAxis: { type: 'value' },
+                        @endif
+                        series: chartColumns.slice(1).map(col => ({
+                            type: '{{ $grafik->tipe ?? bar }}',
+                            name: col,
+                            @if ($grafik->tipe == 'pie')
+                                encode: { itemName: chartColumns[0], value: col }
+                            @else
+                                encode: { x: chartColumns[0], y: col }
+                            @endif
+                        }))
+                    @endif
                 @endif
             };
 
             myChart.setOption(option);
+
+            $(window).on('resize', function(event) {
+                myChart.resize();
+            })
         } else {
-            document.getElementById('chart').innerHTML = '<p class="text-danger">Insufficient data to render chart.</p>';
+            document.getElementById('chart').innerHTML = '<div class="alert alert-danger">Insufficient data to render chart.</div>';
         }
-        
-        $(window).on('resize', function(event) {
-            myChart.resize();
-        })
     </script>
 </x-root>

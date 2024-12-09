@@ -177,22 +177,7 @@
                     align: 'right',
                 },
                 time: 1000,
-                delay: 6000,
-            });
-        @endif
-        @if ($notif = Session::get('error'))
-            $.notify({
-                title: 'FAILED',
-                message: '{{ $notif }}',
-                icon: 'fas fa-exclamation-triangle',
-            }, {
-                type: 'danger',
-                placement: {
-                    from: 'top',
-                    align: 'right',
-                },
-                time: 1000,
-                delay: 6000,
+                delay: 3000,
             });
         @endif
     </script>

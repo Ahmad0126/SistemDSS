@@ -48,9 +48,16 @@ class Graph extends Controller
         $grafik->id_user = auth()->id();
         $grafik->judul = $req->judul;
         $grafik->tipe = $req->tipe;
+        $grafik->query = $req->input('query');
+        $grafik->orientasi = $req->orientasi ?? 'h';
+        $grafik->mr = $req->mr ?? '10';
+        $grafik->ml = $req->ml ?? '10';
+        $grafik->mt = $req->mt ?? '6';
+        $grafik->mb = $req->mb ?? '6';
         $grafik->save();
 
-        return redirect()->back()->with('alert', 'Berhasil membuat grafik');
+        $redirect = $req->input('query') ? redirect(route('grafik', $grafik->id)) : redirect()->back();
+        return $redirect->with('alert', 'Berhasil membuat grafik');
     }
     public function edit(Request $req){
         $req->validate([

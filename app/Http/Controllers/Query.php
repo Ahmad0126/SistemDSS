@@ -21,13 +21,13 @@ class Query extends Controller
                 $result = json_decode(json_encode($result), true);
                 session()->flash('alert', 'Query berhasil dijalankan');
             }else{
-                session()->flash('error', "Masukkan query terlebih dahulu");
+                session()->flash('query_error', "Masukkan query terlebih dahulu");
             }
 
             $data['kolom'] = empty($result) ? [] : array_keys($result[0]);
             $data['baris'] = $result;
         } catch (\Exception $e) {
-            session()->flash('error', $e->getMessage());
+            session()->flash('query_error', $e->getMessage());
         }
 
         $data['tabel'] = UserTabel::where('id_user', auth()->id())->get();
@@ -65,9 +65,11 @@ class Query extends Controller
                         // Jalankan query
                         DB::statement(UserTabel::modifyQuery($query));
             
-                        return redirect()->back()->with('alert', "Query berhasil dijalankan. Cek di halaman database atau tabel");
+                        return redirect()->back()
+                            ->with('alert', "Query berhasil dijalankan. Cek di halaman database atau tabel")
+                            ->withInput();
                     } catch (\Exception $e) {
-                        return redirect()->back()->withErrors($e->getMessage())->withInput();
+                        return redirect()->back()->with('query_error', $e->getMessage())->withInput();
                     }
                 break;
             }
