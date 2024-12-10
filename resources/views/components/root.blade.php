@@ -80,21 +80,21 @@
                 <nav class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom" data-background-color="dark">
                     <div class="container-fluid">
                         <ul class="navbar-nav topbar-nav align-items-center w-100">
-                            <li class="nav-item">
+                            <li class="nav-item {{ $pointer == 1 ? 'active' : '' }}">
                                 <a class="nav-link" href="{{ route('base') }}">Home</a>
                             </li>
                             @can('admin')
-                                <li class="nav-item">
+                                <li class="nav-item {{ $pointer == 2 ? 'active' : '' }}">
                                     <a class="nav-link" href="{{ route('user') }}">User</a>
                                 </li>
                             @endcan
-                            <li class="nav-item">
+                            <li class="nav-item {{ $pointer == 3 ? 'active' : '' }}">
                                 <a class="nav-link" href="{{ route('database') }}">Database</a>
                             </li>
-                            <li class="nav-item">
+                            <li class="nav-item {{ $pointer == 4 ? 'active' : '' }}">
                                 <a class="nav-link" href="{{ route('query') }}">Query</a>
                             </li>
-                            <li class="nav-item">
+                            <li class="nav-item {{ $pointer == 5 ? 'active' : '' }}">
                                 <a class="nav-link" href="{{ route('daftar_grafik') }}">Grafik</a>
                             </li>
                             <li class="nav-item topbar-user dropdown hidden-caret ms-md-auto">

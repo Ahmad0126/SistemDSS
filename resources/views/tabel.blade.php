@@ -9,7 +9,7 @@
     </style>
     <x-slot:title>{{ $title }} </x-slot:title>
     <x-slot:sidebar>
-        <x-sidebar :table="$tabel"></x-sidebar>
+        <x-sidebar :table="$tabel" :pointer="$id"></x-sidebar>
     </x-slot:sidebar>
 
     <div class="row">

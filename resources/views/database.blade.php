@@ -1,4 +1,4 @@
-<x-root>
+<x-root :pointer="3">
     <x-slot:title>{{ $title }} </x-slot:title>
     <x-slot:sidebar>
         <x-sidebar :table="$tabel"></x-sidebar>

@@ -40,6 +40,12 @@ class Query extends Controller
         ]);
 
         $query = $req->input('query');
+        $queries = explode(';', $query);
+        if(count($queries) > 1){
+            if($queries[1] != ""){
+                return redirect()->back()->withErrors("Hanya boleh menjalankan 1 query di setiap operasi")->withInput();
+            }
+        }
         $check = $this->isAllowed($query);
         if($check['status']){
             switch ($check['state']) {

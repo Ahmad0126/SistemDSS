@@ -37,7 +37,7 @@
                     <div class="collapse show" id="table">
                         <ul class="nav nav-collapse">
                             @foreach ($table as $t)
-                                <li>
+                                <li @class(['active' => ($t->id == $pointer)])> 
                                     <a href="{{ route('tabel', $t->id) }}">
                                         <span class="sub-item">{{ $t->nama }}</span>
                                     </a>

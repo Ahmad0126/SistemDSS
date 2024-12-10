@@ -137,6 +137,7 @@ class Home extends Controller
 
         $data['kolom'] = empty($result) ? [] : array_keys($result[0]);
         $data['baris'] = $result;
+        $data['id'] = $id;
         $data['page'] = $tableData;
         $data['tabel'] = UserTabel::where('id_user', auth()->id())->get();
         $data['title'] = 'Tabel '.$tabel->nama;

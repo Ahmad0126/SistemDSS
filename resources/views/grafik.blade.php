@@ -52,6 +52,7 @@
                                     <input type="hidden" name="id" value="{{ $grafik->id }}">
                                 </div>
                             </div>
+                            @if ($grafik->tipe != 'radar' && $grafik->tipe != 'pie')
                             <div class="col-md-6 col-lg-12">
                                 <div class="form-group">
                                     <label for="">Orientasi</label>
@@ -61,6 +62,15 @@
                                     </select>
                                 </div>
                             </div>
+                            @endif
+                            @if ($grafik->tipe == 'radar')
+                                <div class="col-md-6 col-lg-12">
+                                    <div class="form-group">
+                                        <label for="">Nilai maksimal per sumbu</label>
+                                        <input type="number" class="form-control" name="max_sumbu" value="{{ $grafik->max_sumbu }}">
+                                    </div>
+                                </div>
+                            @endif
                             <div class="col-md-6 col-lg-12">
                                 <div class="form-group">
                                     <div class="row align-items-center">
@@ -214,11 +224,14 @@
                     radar: {
                         indicator: chartColumns.slice(1).map(col => ({
                             name: col, // Nama sumbu berdasarkan nama kolom
-                            max: 100   // Maksimum nilai sumbu (bisa diatur dinamis)
+                            @if($grafik->max_sumbu)
+                                max: {{ $grafik->max_sumbu }}  // Maksimum nilai sumbu (bisa diatur dinamis)
+                            @endif
                         }))
                     },
                     series: {
                         type: 'radar',
+                        areaStyle: {},
                         data: chartData.map(row => ({
                             value: chartColumns.slice(1).map(col => row[col]), // Ambil nilai setiap metrik
                             name: row[chartColumns[0]] // Ambil nama kategori (baris pertama)
@@ -239,6 +252,7 @@
                         series: chartColumns.slice(1).map(col => ({
                             type: '{{ $grafik->tipe ?? bar }}',
                             name: col,
+                            symbol: 'none',
                             @if ($grafik->tipe == 'pie')
                                 encode: { itemName: chartColumns[0], value: col }
                             @else
@@ -253,6 +267,7 @@
                         series: chartColumns.slice(1).map(col => ({
                             type: '{{ $grafik->tipe ?? bar }}',
                             name: col,
+                            symbol: 'none',
                             @if ($grafik->tipe == 'pie')
                                 encode: { itemName: chartColumns[0], value: col }
                             @else

@@ -12,7 +12,8 @@ class Sidebar extends Component
      * Create a new component instance.
      */
     public function __construct(
-        public $table = []
+        public $table = [],
+        public $pointer = 0
     ) {}
 
     /**
