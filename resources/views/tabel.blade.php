@@ -16,7 +16,10 @@
         <div class="col">
             <div class="card">
                 <div class="card-header">
-                    <div class="card-title">Data dalam tabel</div>
+                    <div class="d-md-flex justify-content-between align-items-center">
+                        <div class="card-title">Data dalam tabel</div>
+                        <p>Menampilkan data {{ $page->firstItem().' - '.$page->lastItem()  }} dari {{ $page->total() }}</p>
+                    </div>
                 </div>
                 <div class="card-body">
                     @if (count($baris) > 0)
@@ -43,6 +46,7 @@
                     @else
                         <div class="alert alert-info">Belum ada data di tabel ini</div>
                     @endif
+                    {{ $page->onEachSide(1)->links('pagination.template') }}
                 </div>
             </div>
         </div>

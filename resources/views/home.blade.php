@@ -2,14 +2,10 @@
     <x-slot:title>{{ $title }} </x-slot:title>
 
     <div class="row">
-        <div class="col">
+        <div class="col-md-6">
             <div class="card">
-                <div class="card-header d-flex justify-content-between">
-                    <div class="card-title">Project Anda</div>
-                    <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#edit_tabel"
-                        data-url="{{ route('tambah_tabel') }}" data-judul="Tambah Project">
-                        Tambah
-                    </button>
+                <div class="card-header">
+                    <div class="card-title">Tabel Terbaru</div>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -17,7 +13,7 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Project</th>
+                                    <th>Tabel</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -28,16 +24,39 @@
                                         <th scope="row">{{ $no++ }}</th>
                                         <td>{{ $t->nama }}</td>
                                         <td>
+                                            <a href="{{ route('tabel', $t->id) }}" class="btn btn-sm btn-info">Buka</a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Grafik Terbaru</div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover table-striped">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Grafik</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @php $no = 1; @endphp
+                                @foreach ($grafik as $t)
+                                    <tr>
+                                        <th scope="row">{{ $no++ }}</th>
+                                        <td>{{ $t->judul }}</td>
+                                        <td>
                                             <a href="{{ route('grafik', $t->id) }}" class="btn btn-sm btn-info">Buka</a>
-                                            <button class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-id="{{ $t->id }}"
-                                                data-bs-target="#edit_tabel" data-nama="{{ $t->nama }}" data-judul="Edit Project"
-                                                data-url="{{ route('edit_tabel') }}">
-                                                Edit
-                                            </button>
-                                            <a href="{{ route('hapus_tabel', $t->id) }}" class="btn btn-sm btn-danger"
-                                                onclick="return confirm('Yakin ingin menghapus project ini?\r\nSemua data di dalamnya juga akan dihapus')">
-                                                Hapus
-                                            </a>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -48,40 +67,4 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="edit_tabel">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5">Tambah Project</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <form action="{{ route('tambah_tabel') }}" method="post">
-                    <div class="modal-body">
-                        @csrf
-                        <input type="hidden" name="id">
-                        <div class="form-group">
-                            <input type="text" name="nama" class="form-control" placeholder="Nama Project">
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-primary">Tambah</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-    <script>
-        $('#edit_tabel').on('show.bs.modal', function(event){
-            var button = $(event.relatedTarget);
-            var nama = button.data('nama');
-            var id = button.data('id');
-            var modal = $(this);
-            modal.find('form').attr('action', button.data('url'));
-            modal.find('h1.modal-title').html(button.data('judul'));
-            modal.find('button[type="submit"]').html(button.data('judul'));
-            modal.find('input[name="id"]').val(id);
-            modal.find('input[name="nama"]').val(nama);
-        });
-    </script>
 </x-root>

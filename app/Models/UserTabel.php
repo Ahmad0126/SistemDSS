@@ -28,7 +28,7 @@ class UserTabel extends Model
         try{
             if($auto){
                 $nama_tabel = $query;
-                $new_query = 'create table user_'.auth()->id().'_'.$nama_tabel.' (id INT PRIMARY KEY AUTO_INCREMENT)';
+                $new_query = 'create table `user_'.auth()->id().'_'.$nama_tabel.'` (id INT PRIMARY KEY AUTO_INCREMENT)';
             }else{
                 $queries = explode(" ", $query);
                 if(!isset($queries[2])) return redirect()->back()->withErrors('Invalid Query!')->withInput();
@@ -55,7 +55,7 @@ class UserTabel extends Model
             if($auto && $id){
                 $tabel = self::find($id);
                 $new_tabel = $query;
-                $new_query = "ALTER TABLE {$tabel->nama_asli} RENAME user_".auth()->id()."_{$new_tabel}";
+                $new_query = "ALTER TABLE `{$tabel->nama_asli}` RENAME `user_".auth()->id()."_{$new_tabel}`";
             }else{
                 $queries = explode(" ", $query);
                 if(!isset($queries[2])) return redirect()->back()->withErrors('Invalid Query!')->withInput();
@@ -88,7 +88,7 @@ class UserTabel extends Model
         try{
             if($auto){
                 $table = self::find($query);
-                $new_query = "DROP TABLE {$table->nama_asli}";
+                $new_query = "DROP TABLE `{$table->nama_asli}`";
             }else{
                 $queries = explode(" ", $query);
                 if(!isset($queries[2])) return redirect()->back()->withErrors('Invalid Query!')->withInput();

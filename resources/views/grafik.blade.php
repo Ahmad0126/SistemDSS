@@ -4,15 +4,12 @@
     <div class="row">
         <div class="col-lg-8">
             <div class="card">
-                <div class="card-header">
-                    <div class="card-title">{{ $title }}</div>
-                </div>
                 <div class="card-body">
-                    @if ($query_error)
-                        <div class="alert alert-danger">{{ $query_error }}</div>
-                    @else
-                        <div class="chart-container" style="height: 400px" id="chart"></div>
-                    @endif
+                    <div class="chart-container" style="height: 465px" id="chart">
+                        @if ($query_error)
+                            <div class="alert alert-danger">{{ $query_error }}</div>
+                        @endif
+                    </div>
                 </div>
             </div>
         </div>
@@ -194,9 +191,9 @@
             const myChart = echarts.init(chartDom);
 
             const option = {
-                // title: {
-                //     text: 'Query Chart'
-                // },
+                title: {
+                    text: '{{ $grafik->judul }}'
+                },
                 tooltip: {
                     @if($grafik->tipe == 'line')
                         trigger: 'axis'
@@ -208,7 +205,11 @@
                     top: '{{ $grafik->mt ?? 0 }}%',
                     bottom: '{{ $grafik->mb ?? 0 }}%',
                 },
-                legend: {},
+                legend: {
+                    type: 'scroll',
+                    top: 4,
+                    right: 4,
+                },
                 @if ($grafik->tipe == 'radar')
                     radar: {
                         indicator: chartColumns.slice(1).map(col => ({

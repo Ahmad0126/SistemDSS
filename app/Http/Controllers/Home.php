@@ -8,6 +8,7 @@ use App\Models\Baris;
 use App\Models\Kolom;
 use App\Models\Tabel;
 use App\Models\UserTabel;
+use App\Models\UserGrafik;
 use Illuminate\Http\Request;
 use App\Services\QueryService;
 use Illuminate\Support\Facades\DB;
@@ -24,7 +25,8 @@ class Home extends Controller
     }
 
     public function index(){
-        $data['tabel'] = Tabel::where('id_user', Auth::user()->id)->get();
+        $data['tabel'] = UserTabel::where('id_user', Auth::user()->id)->limit(5)->orderBy('created_at', 'desc')->get();
+        $data['grafik'] = UserGrafik::where('id_user', Auth::user()->id)->limit(5)->orderBy('created_at', 'desc')->get();
         $data['title'] = 'Dashboard';
         return view('home', $data);
     }
@@ -130,11 +132,12 @@ class Home extends Controller
 
     public function tabel($id){
         $tabel = UserTabel::find($id);
-        $result = DB::table($tabel->nama_asli)->get();
-        $result = json_decode(json_encode($result), true);
+        $tableData = DB::table($tabel->nama_asli)->paginate(25);
+        $result = json_decode(json_encode($tableData->items()), true);
 
         $data['kolom'] = empty($result) ? [] : array_keys($result[0]);
         $data['baris'] = $result;
+        $data['page'] = $tableData;
         $data['tabel'] = UserTabel::where('id_user', auth()->id())->get();
         $data['title'] = 'Tabel '.$tabel->nama;
         return view('tabel', $data);
