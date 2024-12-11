@@ -35,9 +35,9 @@ Route::middleware('auth')->group(function(){
     Route::post('/ganti_password', [Home::class, 'ganti_password'])->name('ganti_password');
 
     Route::get('/mydatabase', [Table::class, 'index'])->name('database');
-    Route::get('/mydatabase/hapus/{id}', [Home::class, 'hapus'])->name('hapus_tabel');
-    Route::post('/mydatabase/tambah', [Home::class, 'tambah'])->name('tambah_tabel');
-    Route::post('/mydatabase/edit', [Home::class, 'edit'])->name('edit_tabel');
+    Route::get('/mydatabase/hapus/{id}', [Table::class, 'hapus'])->name('hapus_tabel');
+    Route::post('/mydatabase/tambah', [Table::class, 'tambah'])->name('tambah_tabel');
+    Route::post('/mydatabase/edit', [Table::class, 'edit'])->name('edit_tabel');
 
     Route::get('/query', [Query::class, 'index'])->name('query');
     Route::get('/query/result', [Query::class, 'result'])->name('result_query');
@@ -50,25 +50,12 @@ Route::middleware('auth')->group(function(){
         Route::get('/user/hapus/{id}', [User::class, 'hapus'])->name('hapus_user');
     });
     
-    Route::get('/tabel/{id}', [Home::class, 'tabel'])->name('tabel');
-    Route::post('/tabel/tambah', [Table::class, 'tambah_data'])->name('tambah_data');
-    Route::post('/tabel/edit', [Table::class, 'edit_data'])->name('edit_data');
-    Route::get('/tabel/hapus/{id}', [Table::class, 'hapus_data'])->name('hapus_data');
-    
-    Route::post('/baris/tambah', [Table::class, 'tambah_baris'])->name('tambah_baris');
-    Route::post('/baris/edit', [Table::class, 'edit_baris'])->name('edit_baris');
-    Route::post('/baris/hapus', [Table::class, 'hapus_baris'])->name('hapus_baris');
-
-    Route::get('/struktur/{id}', [Table::class, 'struktur'])->name('struktur');
-    Route::post('/struktur/tambah', [Table::class, 'tambah_kolom'])->name('tambah_kolom');
-    Route::post('/struktur/edit', [Table::class, 'edit_kolom'])->name('edit_kolom');
-    Route::post('/struktur/hapus/', [Table::class, 'hapus_kolom'])->name('hapus_kolom');
+    Route::get('/tabel/{id}', [Table::class, 'tabel'])->name('tabel');
+    Route::get('/tabel/struktur/{id}', [Table::class, 'struktur'])->name('struktur');
     
     Route::get('/grafik', [Graph::class, 'index'])->name('daftar_grafik');
     Route::get('/grafik/{id}', [Graph::class, 'show'])->name('grafik');
     Route::post('/grafik/simpan', [Graph::class, 'simpan'])->name('simpan_grafik');
-    Route::post('/grafik/urutkan', [Graph::class, 'urutkan'])->name('urutkan_grafik');
-    Route::post('/grafik/query', [Graph::class, 'query'])->name('query_grafik');
     Route::post('/grafik/tambah', [Graph::class, 'tambah'])->name('tambah_grafik');
     Route::post('/grafik/edit', [Graph::class, 'edit'])->name('edit_grafik');
     Route::get('/grafik/hapus/{id}', [Graph::class, 'hapus'])->name('hapus_grafik');

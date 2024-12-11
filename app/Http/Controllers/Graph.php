@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Baris;
-use App\Models\Tabel;
 use App\Models\UserTabel;
 use App\Models\UserGrafik;
 use Illuminate\Http\Request;
@@ -19,6 +17,9 @@ class Graph extends Controller
     }
     public function show($id){
         $grafik = UserGrafik::find($id);
+        if($grafik->id_user != auth()->id()){
+            abort(403);
+        }
         $data['query_error'] = null;
         try {
             $result = [];
@@ -52,7 +53,7 @@ class Graph extends Controller
         $grafik->orientasi = $req->orientasi ?? 'h';
         $grafik->mr = $req->mr ?? '10';
         $grafik->ml = $req->ml ?? '10';
-        $grafik->mt = $req->mt ?? '6';
+        $grafik->mt = $req->mt ?? '16';
         $grafik->mb = $req->mb ?? '6';
         $grafik->save();
 
@@ -67,6 +68,9 @@ class Graph extends Controller
         ]);
 
         $grafik = UserGrafik::find($req->id);
+        if($grafik->id_user != auth()->id()){
+            return redirect()->back()->withErrors('Grafik ini Bukan Punyamu');
+        }
         $grafik->judul = $req->judul;
         $grafik->tipe = $req->tipe;
         $grafik->save();
@@ -74,6 +78,10 @@ class Graph extends Controller
         return redirect()->back()->with('alert', 'Berhasil mengedit grafik');
     }
     public function hapus($id){
+        $grafik = UserGrafik::find($id);
+        if($grafik->id_user != auth()->id()){
+            abort(403);
+        }
         UserGrafik::destroy($id);
         
         return redirect()->back()->with('alert', 'Berhasil menghapus grafik');
@@ -84,6 +92,9 @@ class Graph extends Controller
         ]);
 
         $grafik = UserGrafik::find($req->id);
+        if($grafik->id_user != auth()->id()){
+            return redirect()->back()->withErrors('Grafik ini Bukan Punyamu');
+        }
         $query = $req->input('query');
         if($query){
             if(!(mb_stripos($query, 'select') === 0)){
@@ -102,17 +113,5 @@ class Graph extends Controller
         $grafik->save();
 
         return redirect()->back()->with('alert', 'Berhasil mengubah pengaturan');
-    }
-    public function urutkan(Request $req){
-        $req->validate([
-            'id_tabel' => 'required|exists:tabel,id',
-            'id_kolom' => 'required|exists:kolom,id',
-            'urutan' => 'required',
-        ]);
-
-        $baris = new Baris();
-        $baris->urutkan($req->id_tabel, $req->id_kolom, $req->urutan);
-
-        return redirect()->back()->with('alert', 'Berhasil mengurutkan data');
     }
 }

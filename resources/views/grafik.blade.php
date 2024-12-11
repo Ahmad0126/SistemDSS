@@ -217,7 +217,7 @@
                 },
                 legend: {
                     type: 'scroll',
-                    top: 4,
+                    top: 20,
                     right: 4,
                 },
                 @if ($grafik->tipe == 'radar')

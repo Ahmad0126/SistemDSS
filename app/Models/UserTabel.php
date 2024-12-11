@@ -18,10 +18,6 @@ class UserTabel extends Model
         'users',
         'user_tabel',
         'user_grafik',
-        'tabel',
-        'kolom',
-        'baris',
-        'data'
     ];
 
     public static function buat_tabel($query, $auto = false){
@@ -54,6 +50,9 @@ class UserTabel extends Model
         try{
             if($auto && $id){
                 $tabel = self::find($id);
+                if($tabel->id_user != auth()->id()){
+                    abort(403);
+                }
                 $new_tabel = $query;
                 $new_query = "ALTER TABLE `{$tabel->nama_asli}` RENAME `user_".auth()->id()."_{$new_tabel}`";
             }else{
@@ -88,6 +87,9 @@ class UserTabel extends Model
         try{
             if($auto){
                 $table = self::find($query);
+                if($table->id_user != auth()->id()){
+                    abort(403);
+                }
                 $new_query = "DROP TABLE `{$table->nama_asli}`";
             }else{
                 $queries = explode(" ", $query);
@@ -110,14 +112,17 @@ class UserTabel extends Model
     public static function modifyQuery($query, $nama_tabel = null){
         $qu = $query;
         $sama = 0;
+        $exception = new \Exception('Tidak boleh menggunakan nama tabel sebagai nama kolom atau alias!');
         if($nama_tabel){
             $sama = preg_match_all('/\b'.$nama_tabel.'\b(?!\.)/', $query);
             $qu = str_replace($nama_tabel, "user_".auth()->id()."_{$nama_tabel}", $query);
+            if($sama > 1){ throw $exception; }
         }else{
             $tabel = UserTabel::where('id_user', auth()->id())->get();
             foreach($tabel as $t){
-                $sama += preg_match_all('/\b'.$t->nama.'\b(?!\.)/', $query);
+                $sama = preg_match_all('/\b'.$t->nama.'\b(?!\.)/', $query);
                 $qu = str_replace($t->nama, $t->nama_asli, $qu);
+                if($sama > 1){ throw $exception; }
             }
         }
         if($qu == $query){
@@ -125,16 +130,12 @@ class UserTabel extends Model
             foreach(self::$system_tables as $t){
                 $sama = preg_match_all('/'.$t.'/', $query);
                 $qu = str_replace(" {$t}", " user_".auth()->id()."_{$t}", $query);
-                if($qu != $query){ break; }
+                if($sama > 1){ throw $exception; }
             }
             //cek apakah user mengakses tabel user lain
             $qu = preg_replace_callback('/(user_\d+)/', function($matches) {
                 return "user_".auth()->id().'_' . $matches[0]; // Tambahkan "$_" di awal
             }, $query);
-        }
-
-        if($sama > 1){
-            throw new \Exception('Tidak boleh menggunakan nama tabel sebagai nama kolom atau alias!');
         }
 
         return $qu;
