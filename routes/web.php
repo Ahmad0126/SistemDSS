@@ -19,6 +19,9 @@ use Inertia\Inertia;
 |
 */
 
+Route::get('/', [Home::class, 'index'])->name('home');
+Route::get('/grafik/public/{id}', [Graph::class, 'tampilkan'])->name('show_grafik');
+
 Route::middleware('guest')->group(function(){
     Route::get('/login', function(){ return view('login'); })->name('masuk');
     Route::get('/daftar', function(){ return view('daftar'); })->name('daftar');
@@ -27,7 +30,7 @@ Route::middleware('guest')->group(function(){
 });
 
 Route::middleware('auth')->group(function(){
-    Route::get('/', [Home::class, 'index'])->name('base');
+    Route::get('/home', [Home::class, 'home'])->name('base');
     Route::get('/password', function(){
         return view('ganti_password');
     })->name('change_password');
@@ -58,6 +61,7 @@ Route::middleware('auth')->group(function(){
     Route::post('/grafik/simpan', [Graph::class, 'simpan'])->name('simpan_grafik');
     Route::post('/grafik/tambah', [Graph::class, 'tambah'])->name('tambah_grafik');
     Route::post('/grafik/edit', [Graph::class, 'edit'])->name('edit_grafik');
+    Route::post('/grafik/publish', [Graph::class, 'publish'])->name('publish_grafik');
     Route::get('/grafik/hapus/{id}', [Graph::class, 'hapus'])->name('hapus_grafik');
 });
 

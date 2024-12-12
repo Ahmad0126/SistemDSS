@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PublicGrafik;
 use App\Models\UserTabel;
 use App\Models\UserGrafik;
 use Illuminate\Http\Request;
@@ -17,7 +18,7 @@ class Graph extends Controller
     }
     public function show($id){
         $grafik = UserGrafik::find($id);
-        if($grafik->id_user != auth()->id()){
+        if(!$grafik || $grafik->id_user != auth()->id()){
             abort(403);
         }
         $data['query_error'] = null;
@@ -37,6 +38,15 @@ class Graph extends Controller
         $data['grafik'] = $grafik;
         $data['title'] = 'Grafik '.$grafik->judul;
         return view('grafik', $data);
+    }
+    public function tampilkan($id){
+        $grafik = PublicGrafik::find($id);
+        if(!$grafik){
+            abort(404);
+        }
+
+        $data['image'] = $grafik->image;
+        return view('view_grafik', $data);
     }
 
     public function tambah(Request $req){
@@ -79,9 +89,11 @@ class Graph extends Controller
     }
     public function hapus($id){
         $grafik = UserGrafik::find($id);
-        if($grafik->id_user != auth()->id()){
+        if(!$grafik || $grafik->id_user != auth()->id()){
             abort(403);
         }
+        $published = PublicGrafik::where('id_grafik', $grafik->id)->get();
+        PublicGrafik::destroy($published);
         UserGrafik::destroy($id);
         
         return redirect()->back()->with('alert', 'Berhasil menghapus grafik');
@@ -92,7 +104,7 @@ class Graph extends Controller
         ]);
 
         $grafik = UserGrafik::find($req->id);
-        if($grafik->id_user != auth()->id()){
+        if(!$grafik || $grafik->id_user != auth()->id()){
             return redirect()->back()->withErrors('Grafik ini Bukan Punyamu');
         }
         $query = $req->input('query');
@@ -113,5 +125,25 @@ class Graph extends Controller
         $grafik->save();
 
         return redirect()->back()->with('alert', 'Berhasil mengubah pengaturan');
+    }
+    public function publish(Request $req){
+        $req->validate([
+            'id' => 'required|exists:user_grafik,id',
+            'image' => 'required',
+        ]);
+
+        $graph = PublicGrafik::where(['id_grafik' => $req->id])->get();
+        if($graph->isEmpty()){
+            $grafik = new PublicGrafik();
+            $grafik->id_grafik = $req->id;
+            $grafik->image = $req->input('image');
+            $grafik->save();
+        }else{
+            $grafik = PublicGrafik::find($graph->first()->id);
+            $grafik->image = $req->input('image');
+            $grafik->save();
+        }
+
+        return redirect()->back()->with('alert', 'Berhasil mempublish');
     }
 }

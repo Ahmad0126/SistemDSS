@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PublicGrafik;
 use App\Models\User;
 use App\Models\UserTabel;
 use App\Models\UserGrafik;
@@ -13,6 +14,12 @@ use Illuminate\Http\RedirectResponse;
 class Home extends Controller
 {
     public function index(){
+        $data['grafik'] = PublicGrafik::getAll();
+        $data['title'] = 'Explore Charts | SistemDSS';
+        return view('landing', $data);
+    }
+    public function home(){
+        $data['published'] = PublicGrafik::getMine(4);
         $data['tabel'] = UserTabel::where('id_user', Auth::user()->id)->limit(5)->orderBy('created_at', 'desc')->get();
         $data['grafik'] = UserGrafik::where('id_user', Auth::user()->id)->limit(5)->orderBy('created_at', 'desc')->get();
         $data['title'] = 'Dashboard';

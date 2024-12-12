@@ -26,12 +26,9 @@
         <div class="col-lg-4">
             <div class="card">
                 <form action="{{ route('simpan_grafik') }}" method="post">
-                    <div class="card-header d-flex justify-content-between">
-                        <div class="card-title">Pengaturan</div>
-                        <button type="submit" class="btn btn-sm btn-primary">Terapkan</button>
-                    </div>
-                    <div class="card-body" style="max-height: 435px; overflow-y: scroll">
+                    <div class="card-body" style="max-height: 450px; overflow-y: scroll">
                         @csrf
+                        <div class="card-title">Pengaturan</div>
                         <div class="row">
                             <div class="col">
                                 <div class="form-group">
@@ -137,6 +134,10 @@
                             </div>
                         </div>
                     </div>
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-sm btn-primary">Simpan</button>
+                        <button  type="button" class="btn btn-sm btn-secondary" id="publish">Publish</button>
+                    </div>
                 </form>
             </div>
         </div>
@@ -146,6 +147,11 @@
         <div class="col">
             <div class="card">
                 <div class="card-header p-0">
+                    <form id="publish_form" action="{{ route('publish_grafik') }}" method="post">
+                        @csrf
+                        <input type="hidden" name="id" value="{{ $grafik->id }}">
+                        <input type="hidden" name="image" id="image">
+                    </form>
                     <nav class="navbar navbar-expand-lg">
                         <div class="container-fluid">
                             <h3 class="navbar-brand mb-0 ms-2">Data</h3>
@@ -283,8 +289,39 @@
             $(window).on('resize', function(event) {
                 myChart.resize();
             })
+
+            $('#publish').on('click', function(event){
+                const svg = getSvgChart(option);
+                const form = $('#publish_form');
+                form.find('#image').val(svg);
+                if(confirm('Grafik anda akan terlihat oleh umum. Konfirmasi pilihan anda')){
+                    form.submit();
+                }
+            })
         } else {
             document.getElementById('chart').innerHTML = '<div class="alert alert-danger">Insufficient data to render chart.</div>';
+        }
+
+        // render svg string 
+        function getSvgChart(option){
+            let chart = echarts.init(null, null, {
+                renderer: 'svg', // must use SVG rendering mode
+                ssr: true, // enable SSR
+                width: 858, // need to specify height and width
+                height: 480
+            });
+
+            // use setOption as normal
+            chart.setOption(option);
+
+            // Output a string
+            const svgStr = chart.renderToSVGString();
+
+            // If chart is no longer useful, consider disposing it to release memory.
+            chart.dispose();
+            chart = null;
+            
+            return svgStr;
         }
     </script>
 </x-root>

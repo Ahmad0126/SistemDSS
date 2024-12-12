@@ -80,61 +80,74 @@
                 <nav class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom" data-background-color="dark">
                     <div class="container-fluid">
                         <ul class="navbar-nav topbar-nav align-items-center w-100">
-                            <li class="nav-item {{ $pointer == 1 ? 'active' : '' }}">
-                                <a class="nav-link" href="{{ route('base') }}">Home</a>
-                            </li>
-                            @can('admin')
-                                <li class="nav-item {{ $pointer == 2 ? 'active' : '' }}">
-                                    <a class="nav-link" href="{{ route('user') }}">User</a>
+                            @auth
+                                <li class="nav-item {{ $pointer == 1 ? 'active' : '' }}">
+                                    <a class="nav-link" href="{{ route('base') }}">Home</a>
                                 </li>
-                            @endcan
-                            <li class="nav-item {{ $pointer == 3 ? 'active' : '' }}">
-                                <a class="nav-link" href="{{ route('database') }}">Database</a>
-                            </li>
-                            <li class="nav-item {{ $pointer == 4 ? 'active' : '' }}">
-                                <a class="nav-link" href="{{ route('query') }}">Query</a>
-                            </li>
-                            <li class="nav-item {{ $pointer == 5 ? 'active' : '' }}">
-                                <a class="nav-link" href="{{ route('daftar_grafik') }}">Grafik</a>
-                            </li>
-                            <li class="nav-item topbar-user dropdown hidden-caret ms-md-auto">
-                                <a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#"
-                                    aria-expanded="false">
-                                    <div class="avatar-sm">
-                                        <img src="{{ Vite::asset('resources/img/unknown.png') }}" alt="..."
-                                            class="avatar-img rounded-circle" />
-                                    </div>
-                                    <span class="profile-username">
-                                        <span class="fw-bold">{{ Auth::user()->nama }}</span>
-                                    </span>
-                                </a>
-                                <ul class="dropdown-menu dropdown-user animated fadeIn">
-                                    <div class="dropdown-user-scroll scrollbar-outer">
-                                        <li>
-                                            <div class="user-box">
-                                                <div class="avatar-lg">
-                                                    <img src="{{ Vite::asset('resources/img/unknown.png') }}" alt="image profile"
-                                                        class="avatar-img rounded" />
+                                @can('admin')
+                                    <li class="nav-item {{ $pointer == 2 ? 'active' : '' }}">
+                                        <a class="nav-link" href="{{ route('user') }}">User</a>
+                                    </li>
+                                @endcan
+                                <li class="nav-item {{ $pointer == 3 ? 'active' : '' }}">
+                                    <a class="nav-link" href="{{ route('database') }}">Database</a>
+                                </li>
+                                <li class="nav-item {{ $pointer == 4 ? 'active' : '' }}">
+                                    <a class="nav-link" href="{{ route('query') }}">Query</a>
+                                </li>
+                                <li class="nav-item {{ $pointer == 5 ? 'active' : '' }}">
+                                    <a class="nav-link" href="{{ route('daftar_grafik') }}">Grafik</a>
+                                </li>
+                                <li class="nav-item topbar-user dropdown hidden-caret ms-md-auto">
+                                    <a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#"
+                                        aria-expanded="false">
+                                        <div class="avatar-sm">
+                                            <img src="{{ Vite::asset('resources/img/unknown.png') }}" alt="..."
+                                                class="avatar-img rounded-circle" />
+                                        </div>
+                                        <span class="profile-username">
+                                            <span class="fw-bold">{{ Auth::user()->nama }}</span>
+                                        </span>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-user animated fadeIn">
+                                        <div class="dropdown-user-scroll scrollbar-outer">
+                                            <li>
+                                                <div class="user-box">
+                                                    <div class="avatar-lg">
+                                                        <img src="{{ Vite::asset('resources/img/unknown.png') }}" alt="image profile"
+                                                            class="avatar-img rounded" />
+                                                    </div>
+                                                    <div class="u-text text-white">
+                                                        <h4>{{ Auth::user()->nama }}</h4>
+                                                        <small class="op-7">{{ Auth::user()->email }}</small>
+                                                    </div>
                                                 </div>
-                                                <div class="u-text text-white">
-                                                    <h4>{{ Auth::user()->nama }}</h4>
-                                                    <small class="op-7">{{ Auth::user()->email }}</small>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="dropdown-divider"></div>
-                                            <a href="{{ route('change_password') }}" class="dropdown-item">
-                                               Ganti Password
-                                            </a>
-                                            <form action="{{ route('logout') }}" method="post">
-                                                @csrf
-                                                <button type="submit" class="dropdown-item">Logout</button>
-                                            </form>
-                                        </li>
-                                    </div>
-                                </ul>
-                            </li>
+                                            </li>
+                                            <li>
+                                                <div class="dropdown-divider"></div>
+                                                <a href="{{ route('change_password') }}" class="dropdown-item">
+                                                Ganti Password
+                                                </a>
+                                                <form action="{{ route('logout') }}" method="post">
+                                                    @csrf
+                                                    <button type="submit" class="dropdown-item">Logout</button>
+                                                </form>
+                                            </li>
+                                        </div>
+                                    </ul>
+                                </li>
+                            @endauth
+                            @guest
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('home') }}">Home</a>
+                                </li>
+                                <li class="nav-item ms-md-auto">
+                                    <a class="nav-link" href="{{ route('daftar') }}">Daftar</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('login') }}">Login</a>
+                                </li>
+                            @endguest
                         </ul>
                     </div>
                 </nav>
