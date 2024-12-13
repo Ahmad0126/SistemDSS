@@ -3,10 +3,12 @@
 
     <div class="p-3">
         <h1 class="text-center">Explore Projects</h1>
-        <div class="input-group pb-3">
-            <input type="search" class="form-control" name="" id="" placeholder="Search Keyword">
-            <button class="btn btn-primary">Search</button>
-        </div>
+        <form action="{{ route('search_mine') }}" method="get">
+            <div class="input-group pb-5">
+                <input type="search" class="form-control" name="key" id="" placeholder="Search Keyword">
+                <button class="btn btn-primary" type="submit">Search</button>
+            </div>
+        </form>
     </div>
     <div class="row">
         <div class="col-md-6">
@@ -25,7 +27,9 @@
                                 {!! $g->image !!}
                             </div>
                             <div class="card-body">
-                                <b>{{ $g->judul }}</b>
+                                <a href="{{ route('project', $g->id) }}">
+                                    <b>{{ $g->judul }}</b>
+                                </a>
                             </div>
                         </div>
                     </div>

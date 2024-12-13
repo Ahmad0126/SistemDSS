@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Gate;
 class Graph extends Controller
 {
     public function index(){
-        $data['grafik'] = UserGrafik::where('id_user', auth()->id())->get();
+        $data['grafik'] = UserGrafik::getMine();
         $data['title'] = 'Daftar Grafik';
         return view('daftar_grafik', $data);
     }
@@ -45,8 +45,25 @@ class Graph extends Controller
             abort(404);
         }
 
-        $data['image'] = $grafik->image;
+        $grafik = UserGrafik::find($grafik->id_grafik);
+        $data['query_error'] = null;
+        try {
+            $result = [];
+            if($grafik->query){
+                $result = DB::select(UserTabel::modifyQuery($grafik->query));
+                $result = json_decode(json_encode($result), true);
+            }
+
+            $data['kolom'] = empty($result) ? [] : array_keys($result[0]);
+            $data['baris'] = $result;
+        } catch (\Exception $e) {
+            $data['query_error'] = $e->getMessage();
+        }
+
+        $data['grafik'] = $grafik;
+        $data['title'] = 'Grafik '.$grafik->judul;
         return view('view_grafik', $data);
+        // return response($grafik->image, 200)->header('Content-Type','image/svg+xml');
     }
 
     public function tambah(Request $req){
@@ -144,6 +161,16 @@ class Graph extends Controller
             $grafik->save();
         }
 
-        return redirect()->back()->with('alert', 'Berhasil mempublish');
+        return redirect()->back()->with('alert', 'Berhasil mempublish grafik');
+    }
+    public function unpublish($id){
+        $grafik = UserGrafik::find($id);
+        $published = PublicGrafik::where('id_grafik', $grafik->id)->get();
+        if($published->isEmpty() || $grafik->id_user != auth()->id()){
+            abort(403);
+        }
+        PublicGrafik::destroy($published);
+        
+        return redirect()->back()->with('alert', 'Berhasil unpublish grafik');
     }
 }

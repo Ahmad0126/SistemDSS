@@ -19,6 +19,7 @@
                                     <th>#</th>
                                     <th>Grafik</th>
                                     <th>Tipe</th>
+                                    <th>Dipublish</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -30,6 +31,13 @@
                                         <td>{{ $t->judul }}</td>
                                         <td>{{ $t->tipe }}</td>
                                         <td>
+                                            @if ($t->id_grafik)
+                                                <span class="badge badge-success">Ya</span>
+                                            @else 
+                                                <span class="badge badge-warning">Tidak</span>
+                                            @endif
+                                        </td>
+                                        <td>
                                             <a href="{{ route('grafik', $t->id) }}" class="btn btn-sm btn-info">Buka</a>
                                             <button class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-id="{{ $t->id }}"
                                                 data-bs-target="#edit_grafik" data-judul="{{ $t->judul }}" data-title="Edit Grafik"
@@ -40,6 +48,12 @@
                                                 onclick="return confirm('Yakin ingin menghapus grafik ini?\r\nSemua data di dalamnya juga akan dihapus')">
                                                 Hapus
                                             </a>
+                                            @if ($t->id_grafik)
+                                                <a href="{{ route('unpublish_grafik', $t->id) }}" class="btn btn-sm btn-warning"
+                                                    onclick="return confirm('Yakin unpublish grafik ini?')">
+                                                    Unpublish
+                                                </a>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach

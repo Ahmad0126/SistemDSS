@@ -25,6 +25,26 @@ class Home extends Controller
         $data['title'] = 'Dashboard';
         return view('home', $data);
     }
+    public function project($id){
+        $grafik = PublicGrafik::getSingle($id);
+        if($grafik->isEmpty()) abort(404);
+
+        $data['grafik'] = $grafik->first();
+        $data['title'] = $data['grafik']->judul.' | SistemDSS';
+        return view('deskripsi_grafik', $data);
+    }
+    public function search(Request $req){
+        $data['grafik'] = PublicGrafik::search($req->key);
+        $data['public'] = true;
+        $data['title'] = 'Search '.$req->key.' | SistemDSS';
+        return view('landing', $data);
+    }
+    public function search_mine(Request $req){
+        $data['grafik'] = PublicGrafik::searchMine($req->key);
+        $data['public'] = false;
+        $data['title'] = 'Search '.$req->key.' | SistemDSS';
+        return view('landing', $data);
+    }
 
     public function login(Request $req):RedirectResponse{
         $user = $req->validate([
@@ -34,7 +54,7 @@ class Home extends Controller
 
         if(Auth::attempt($user)){
             $req->session()->regenerate();
-            return redirect()->intended();
+            return redirect()->intended('/home');
         }
 
         return back()->withErrors([

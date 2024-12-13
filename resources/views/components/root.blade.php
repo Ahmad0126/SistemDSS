@@ -139,7 +139,9 @@
                             @endauth
                             @guest
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('home') }}">Home</a>
+                                    <a href="{{ route('home') }}" class="logo text-white">
+                                        <h1 class="mb-0">SistemDSS</h1>
+                                    </a>
                                 </li>
                                 <li class="nav-item ms-md-auto">
                                     <a class="nav-link" href="{{ route('daftar') }}">Daftar</a>

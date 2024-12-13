@@ -21,6 +21,8 @@ use Inertia\Inertia;
 
 Route::get('/', [Home::class, 'index'])->name('home');
 Route::get('/grafik/public/{id}', [Graph::class, 'tampilkan'])->name('show_grafik');
+Route::get('/project/search', [Home::class, 'search'])->name('search');
+Route::get('/project/{id}', [Home::class, 'project'])->name('project');
 
 Route::middleware('guest')->group(function(){
     Route::get('/login', function(){ return view('login'); })->name('masuk');
@@ -57,12 +59,14 @@ Route::middleware('auth')->group(function(){
     Route::get('/tabel/struktur/{id}', [Table::class, 'struktur'])->name('struktur');
     
     Route::get('/grafik', [Graph::class, 'index'])->name('daftar_grafik');
+    Route::get('/grafik/search', [Home::class, 'search_mine'])->name('search_mine');
     Route::get('/grafik/{id}', [Graph::class, 'show'])->name('grafik');
     Route::post('/grafik/simpan', [Graph::class, 'simpan'])->name('simpan_grafik');
     Route::post('/grafik/tambah', [Graph::class, 'tambah'])->name('tambah_grafik');
     Route::post('/grafik/edit', [Graph::class, 'edit'])->name('edit_grafik');
     Route::post('/grafik/publish', [Graph::class, 'publish'])->name('publish_grafik');
     Route::get('/grafik/hapus/{id}', [Graph::class, 'hapus'])->name('hapus_grafik');
+    Route::get('/grafik/unpublish/{id}', [Graph::class, 'unpublish'])->name('unpublish_grafik');
 });
 
 Route::get('reactor/', function () {
