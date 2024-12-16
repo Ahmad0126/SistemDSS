@@ -36,7 +36,8 @@ class PublicGrafik extends Model
         if(!$id) abort(404);
 
         return DB::table(DB::raw('public_grafik p'))
-            ->selectRaw('p.id, p.id_grafik, p.image, g.judul, g.id_user, u.nama, p.created_at')
+            ->select(['p.id', 'p.id_grafik', 'g.judul', 'g.id_user', 'u.nama', 'p.created_at',
+                'g.ml', 'g.mr', 'g.mb', 'g.mt', 'g.tipe', 'g.orientasi', 'g.query'])
             ->join(DB::raw('user_grafik g'), 'g.id', '=', 'p.id_grafik')
             ->join(DB::raw('users u'), 'u.id', '=', 'g.id_user')
             ->where('p.id', $id)

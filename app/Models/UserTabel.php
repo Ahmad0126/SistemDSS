@@ -109,16 +109,17 @@ class UserTabel extends Model
         }
     }
 
-    public static function modifyQuery($query, $nama_tabel = null){
+    public static function modifyQuery($query, $nama_tabel = null, $user_id = null){
         $qu = $query;
         $sama = 0;
+        $id_user = $user_id ?? auth()->id();
         $exception = new \Exception('Tidak boleh menggunakan nama tabel sebagai nama kolom atau alias!');
         if($nama_tabel){
             $sama = preg_match_all('/\b'.$nama_tabel.'\b(?!\.)/', $query);
-            $qu = str_replace($nama_tabel, "user_".auth()->id()."_{$nama_tabel}", $query);
+            $qu = str_replace($nama_tabel, "user_{$id_user}_{$nama_tabel}", $query);
             if($sama > 1){ throw $exception; }
         }else{
-            $tabel = UserTabel::where('id_user', auth()->id())->get();
+            $tabel = UserTabel::where('id_user', $id_user)->get();
             foreach($tabel as $t){
                 $sama = preg_match_all('/\b'.$t->nama.'\b(?!\.)/', $query);
                 $qu = str_replace($t->nama, $t->nama_asli, $qu);
@@ -129,12 +130,12 @@ class UserTabel extends Model
             //cek apakah user mengakses system table
             foreach(self::$system_tables as $t){
                 $sama = preg_match_all('/'.$t.'/', $query);
-                $qu = str_replace(" {$t}", " user_".auth()->id()."_{$t}", $query);
+                $qu = str_replace(" {$t}", " user_{$id_user}_{$t}", $query);
                 if($sama > 1){ throw $exception; }
             }
             //cek apakah user mengakses tabel user lain
-            $qu = preg_replace_callback('/(user_\d+)/', function($matches) {
-                return "user_".auth()->id().'_' . $matches[0]; // Tambahkan "$_" di awal
+            $qu = preg_replace_callback('/(user_\d+)/', function($matches) use($id_user) {
+                return "user_{$id_user}_" . $matches[0]; // Tambahkan "$_" di awal
             }, $query);
         }
 

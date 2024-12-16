@@ -50,7 +50,7 @@ class Graph extends Controller
         try {
             $result = [];
             if($grafik->query){
-                $result = DB::select(UserTabel::modifyQuery($grafik->query));
+                $result = DB::select(UserTabel::modifyQuery($grafik->query, user_id: $grafik->id_user));
                 $result = json_decode(json_encode($result), true);
             }
 
@@ -63,7 +63,14 @@ class Graph extends Controller
         $data['grafik'] = $grafik;
         $data['title'] = 'Grafik '.$grafik->judul;
         return view('view_grafik', $data);
-        // return response($grafik->image, 200)->header('Content-Type','image/svg+xml');
+    }
+    public function thumbnail($id){
+        $grafik = PublicGrafik::find($id);
+        if($grafik){
+            return response($grafik->image, 200)->header('Content-Type','image/svg+xml');
+        }else{
+            return response(status: 404);
+        }
     }
 
     public function tambah(Request $req){

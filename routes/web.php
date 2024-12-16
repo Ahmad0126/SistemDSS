@@ -21,6 +21,7 @@ use Inertia\Inertia;
 
 Route::get('/', [Home::class, 'index'])->name('home');
 Route::get('/grafik/public/{id}', [Graph::class, 'tampilkan'])->name('show_grafik');
+Route::get('/grafik/thumbnail/{id}', [Graph::class, 'thumbnail'])->name('thumbnail_grafik');
 Route::get('/project/search', [Home::class, 'search'])->name('search');
 Route::get('/project/{id}', [Home::class, 'project'])->name('project');
 

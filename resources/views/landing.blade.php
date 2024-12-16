@@ -23,7 +23,7 @@
             <div class="col-xl-3 col-lg-4 col-sm-6">
                 <div class="card">
                     <div class="card-img-top p-2 pb-0">
-                        {!! $g->image !!}
+                        <img src="{{ route('thumbnail_grafik', $g->id) }}" class="img-fluid" alt="{{ $g->judul }}">
                     </div>
                     <div class="card-body">
                         <a href="{{ route('project', $g->id) }}">

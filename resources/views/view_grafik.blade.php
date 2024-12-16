@@ -7,58 +7,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="{{ Vite::asset('resources/img/kaiadmin/favicon.ico') }}" type="image/x-icon" />
 
-    <!-- Fonts and icons -->
-    <script src="{{ Vite::asset('resources/js/plugin/webfont/webfont.min.js') }}"></script>
-    <script>
-        WebFont.load({
-            google: {
-                families: ["Public Sans:300,400,500,600,700"]
-            },
-            custom: {
-                families: [
-                    "Font Awesome 5 Solid",
-                    "Font Awesome 5 Regular",
-                    "Font Awesome 5 Brands",
-                    "simple-line-icons",
-                ],
-                urls: ["{{ Vite::asset('resources/css/fonts.min.css') }}"],
-            },
-            active: function() {
-                sessionStorage.fonts = true;
-            },
-        });
-    </script>
-    <!--   Core JS Files   -->
-    <script src="{{ Vite::asset('resources/js/core/jquery-3.7.1.min.js') }}"></script>
-    <script src="{{ Vite::asset('resources/js/core/popper.min.js') }}"></script>
-    <script src="{{ Vite::asset('resources/js/core/bootstrap.min.js') }}"></script>
-
-    <!-- jQuery Scrollbar -->
-    <script src="{{ Vite::asset('resources/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js') }}"></script>
-
-    <!-- Bootstrap Notify -->
-    <script src="{{ Vite::asset('resources/js/plugin/bootstrap-notify/bootstrap-notify.min.js') }}"></script>
-
-    <!-- Kaiadmin JS -->
-    <script src="{{ Vite::asset('resources/js/kaiadmin.min.js') }}"></script>
-
     <!-- CSS Files -->
     <link rel="stylesheet" href="{{ Vite::asset('resources/css/bootstrap.min.css') }}" />
     <link rel="stylesheet" href="{{ Vite::asset('resources/css/plugins.min.css') }}" />
-    <link rel="stylesheet" href="{{ Vite::asset('resources/css/kaiadmin.css') }}" />
-
+    <link rel="stylesheet" href="{{ Vite::asset('resources/css/kaiadmin.min.css') }}" />
     <title>{{ $title }} </title>
 </head>
 
 <body>
-    <div class="card">
-        <div class="card-body">
-            <div class="chart-container" style="height: 100vh; width: 100%;" id="chart">
-                @if ($query_error)
-                    <div class="alert alert-danger">{{ $query_error }}</div>
-                @endif
-            </div>
-        </div>
+    <div class="chart-container" style="width: 100%; height: 100vh; background: white" id="chart">
+        @if ($query_error)
+            <div class="alert alert-danger">{{ $query_error }}</div>
+        @endif
     </div>
     <script src="{{ Vite::asset('resources/js/plugin/apache-echarts/echarts.min.js') }}"></script>
     <script>
@@ -154,7 +114,8 @@
                 myChart.resize();
             })
         } else {
-            document.getElementById('chart').innerHTML = '<div class="alert alert-danger">Insufficient data to render chart.</div>';
+            document.getElementById('chart').innerHTML = 
+                '<div class="alert alert-danger">{{ $query_error ?? 'Insufficient data to render chart.' }}</div>';
         }
     </script>
 </body>

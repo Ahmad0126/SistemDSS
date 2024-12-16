@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\PublicGrafik;
 use App\Models\User;
 use App\Models\UserTabel;
 use App\Models\UserGrafik;
+use App\Models\PublicGrafik;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\RedirectResponse;
@@ -15,6 +16,7 @@ class Home extends Controller
 {
     public function index(){
         $data['grafik'] = PublicGrafik::getAll();
+        $data['public'] = true;
         $data['title'] = 'Explore Charts | SistemDSS';
         return view('landing', $data);
     }
@@ -26,10 +28,25 @@ class Home extends Controller
         return view('home', $data);
     }
     public function project($id){
-        $grafik = PublicGrafik::getSingle($id);
-        if($grafik->isEmpty()) abort(404);
+        $grafik = PublicGrafik::getSingle($id)->first();
+        if(!$grafik) abort(404);
+        
+        $graph = UserGrafik::find($grafik->id_grafik);
+        $data['query_error'] = null;
+        try {
+            $result = [];
+            if($graph->query){
+                $result = DB::select(UserTabel::modifyQuery($graph->query, user_id: $graph->id_user));
+                $result = json_decode(json_encode($result), true);
+            }
 
-        $data['grafik'] = $grafik->first();
+            $data['kolom'] = empty($result) ? [] : array_keys($result[0]);
+            $data['baris'] = $result;
+        } catch (\Exception $e) {
+            $data['query_error'] = $e->getMessage();
+        }
+
+        $data['grafik'] = $grafik;
         $data['title'] = $data['grafik']->judul.' | SistemDSS';
         return view('deskripsi_grafik', $data);
     }

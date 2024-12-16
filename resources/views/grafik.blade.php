@@ -299,7 +299,8 @@
                 }
             })
         } else {
-            document.getElementById('chart').innerHTML = '<div class="alert alert-danger">Insufficient data to render chart.</div>';
+            document.getElementById('chart').innerHTML = 
+                '<div class="alert alert-danger">{{ $query_error ?? 'Insufficient data to render chart.' }}</div>';
         }
 
         // render svg string 

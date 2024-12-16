@@ -57,7 +57,7 @@
                 <div class="main-header-logo">
                     <!-- Logo Header -->
                     <div class="logo-header" data-background-color="dark">
-                        <a href="{{ route('base') }}" class="logo text-white">
+                        <a href="{{ route('home') }}" class="logo text-white">
                             <h1 class="mb-0">SistemDSS</h1>
                         </a>
                         <div class="nav-toggle">
@@ -160,6 +160,15 @@
                     {{ $slot }}
                 </div>
             </div>
+            <footer class="footer">
+                <div class="container-fluid d-flex justify-content-center">
+                    <div class="copyright">
+                        &copy; 2024, 
+                        <a href="https://github.com/Ahmad0126" target="_blank">Ahmad Zaid.</a> 
+                        All Rights Reserved
+                    </div>
+                </div>
+            </footer>
         </div>
     </div>
     <script>
