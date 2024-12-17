@@ -15,6 +15,15 @@ use Illuminate\Http\RedirectResponse;
 class Home extends Controller
 {
     public function index(){
+        $query = [
+            'publisher' => null,
+            'tipe_grafik' => null,
+            'order_by' => null,
+            'urutan' => null,
+            'key' => null,
+        ];
+        
+        $data['old'] = $query;
         $data['grafik'] = PublicGrafik::getAll();
         $data['public'] = true;
         $data['title'] = 'Explore Charts | SistemDSS';
@@ -51,7 +60,16 @@ class Home extends Controller
         return view('deskripsi_grafik', $data);
     }
     public function search(Request $req){
-        $data['grafik'] = PublicGrafik::search($req->key);
+        $query = [
+            'publisher' => $req->publisher,
+            'tipe_grafik' => $req->tipe_grafik,
+            'order_by' => $req->order_by,
+            'urutan' => $req->urutan,
+            'key' => $req->key,
+        ];
+        
+        $data['old'] = $query;
+        $data['grafik'] = PublicGrafik::search($req)->appends($query);
         $data['public'] = true;
         $data['title'] = 'Search '.$req->key.' | SistemDSS';
         return view('landing', $data);
