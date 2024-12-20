@@ -4,10 +4,10 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-    <link rel="icon" href="{{ Vite::asset('resources/img/kaiadmin/favicon.ico') }}" type="image/x-icon" />
+    <link rel="icon" href="{{ asset('img/kaiadmin/favicon.ico') }}" type="image/x-icon" />
 
     <!-- Fonts and icons -->
-    <script src="{{ Vite::asset('resources/js/plugin/webfont/webfont.min.js') }}"></script>
+    <script src="{{ asset('js/plugin/webfont/webfont.min.js') }}"></script>
     <script>
         WebFont.load({
             google: {
@@ -20,7 +20,7 @@
                     "Font Awesome 5 Brands",
                     "simple-line-icons",
                 ],
-                urls: ["{{ Vite::asset('resources/css/fonts.min.css') }}"],
+                urls: ["{{ asset('css/fonts.min.css') }}"],
             },
             active: function() {
                 sessionStorage.fonts = true;
@@ -28,23 +28,23 @@
         });
     </script>
     <!--   Core JS Files   -->
-    <script src="{{ Vite::asset('resources/js/core/jquery-3.7.1.min.js') }}"></script>
-    <script src="{{ Vite::asset('resources/js/core/popper.min.js') }}"></script>
-    <script src="{{ Vite::asset('resources/js/core/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('js/core/jquery-3.7.1.min.js') }}"></script>
+    <script src="{{ asset('js/core/popper.min.js') }}"></script>
+    <script src="{{ asset('js/core/bootstrap.min.js') }}"></script>
 
     <!-- jQuery Scrollbar -->
-    <script src="{{ Vite::asset('resources/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js') }}"></script>
+    <script src="{{ asset('js/plugin/jquery-scrollbar/jquery.scrollbar.min.js') }}"></script>
 
     <!-- Bootstrap Notify -->
-    <script src="{{ Vite::asset('resources/js/plugin/bootstrap-notify/bootstrap-notify.min.js') }}"></script>
+    <script src="{{ asset('js/plugin/bootstrap-notify/bootstrap-notify.min.js') }}"></script>
 
     <!-- Kaiadmin JS -->
-    <script src="{{ Vite::asset('resources/js/kaiadmin.min.js') }}"></script>
+    <script src="{{ asset('js/kaiadmin.min.js') }}"></script>
 
     <!-- CSS Files -->
-    <link rel="stylesheet" href="{{ Vite::asset('resources/css/bootstrap.min.css') }}" />
-    <link rel="stylesheet" href="{{ Vite::asset('resources/css/plugins.min.css') }}" />
-    <link rel="stylesheet" href="{{ Vite::asset('resources/css/kaiadmin.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/plugins.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/kaiadmin.css') }}" />
 
     <title>{{ $title }} </title>
 </head>
@@ -102,7 +102,7 @@
                                     <a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#"
                                         aria-expanded="false">
                                         <div class="avatar-sm">
-                                            <img src="{{ Vite::asset('resources/img/unknown.png') }}" alt="..."
+                                            <img src="{{ asset('img/unknown.png') }}" alt="..."
                                                 class="avatar-img rounded-circle" />
                                         </div>
                                         <span class="profile-username">
@@ -114,7 +114,7 @@
                                             <li>
                                                 <div class="user-box">
                                                     <div class="avatar-lg">
-                                                        <img src="{{ Vite::asset('resources/img/unknown.png') }}" alt="image profile"
+                                                        <img src="{{ asset('img/unknown.png') }}" alt="image profile"
                                                             class="avatar-img rounded" />
                                                     </div>
                                                     <div class="u-text text-white">

@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::table('users', function(Blueprint $table){
             $table->dropColumn('remember_token');
+            $table->dropColumn('name');
             $table->string('nama', 100);
             $table->string('level', 20);
         });
@@ -25,6 +26,7 @@ return new class extends Migration
     {
         Schema::table('users', function(Blueprint $table){
             $table->timestamp('remember_token');
+            $table->string('name');
             $table->dropColumn('nama');
             $table->dropColumn('level');
         });

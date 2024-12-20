@@ -168,7 +168,7 @@
     </div>
 
     <!-- Chart JS -->
-    <script src="{{ Vite::asset('resources/js/plugin/apache-echarts/echarts.min.js') }}"></script>
+    <script src="{{ asset('js/plugin/apache-echarts/echarts.min.js') }}"></script>
     <script>
         $('#mr').on('change', function(event){
             $('#lmr').val($(this).val())
@@ -237,7 +237,6 @@
                     },
                     series: {
                         type: 'radar',
-                        areaStyle: {},
                         data: chartData.map(row => ({
                             value: chartColumns.slice(1).map(col => row[col]), // Ambil nilai setiap metrik
                             name: row[chartColumns[0]] // Ambil nama kategori (baris pertama)

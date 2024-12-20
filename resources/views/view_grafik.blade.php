@@ -5,12 +5,12 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="{{ Vite::asset('resources/img/kaiadmin/favicon.ico') }}" type="image/x-icon" />
+    <link rel="icon" href="{{ asset('img/kaiadmin/favicon.ico') }}" type="image/x-icon" />
 
     <!-- CSS Files -->
-    <link rel="stylesheet" href="{{ Vite::asset('resources/css/bootstrap.min.css') }}" />
-    <link rel="stylesheet" href="{{ Vite::asset('resources/css/plugins.min.css') }}" />
-    <link rel="stylesheet" href="{{ Vite::asset('resources/css/kaiadmin.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/plugins.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/kaiadmin.min.css') }}" />
     <title>{{ $title }} </title>
 </head>
 
@@ -20,7 +20,7 @@
             <div class="alert alert-danger">{{ $query_error }}</div>
         @endif
     </div>
-    <script src="{{ Vite::asset('resources/js/plugin/apache-echarts/echarts.min.js') }}"></script>
+    <script src="{{ asset('js/plugin/apache-echarts/echarts.min.js') }}"></script>
     <script>
         // Data dari backend
         const chartData = @json($baris ?? []);

@@ -55,7 +55,7 @@
             </div>
         </div>
     </div>
-    <script src="{{ Vite::asset('resources/js/plugin/apache-echarts/echarts.min.js') }}"></script>
+    <script src="{{ asset('js/plugin/apache-echarts/echarts.min.js') }}"></script>
     <script>
         // Data dari backend
         const chartData = @json($baris ?? []);

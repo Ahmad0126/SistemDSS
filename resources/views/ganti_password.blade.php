@@ -4,10 +4,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>Ganti Password</title>
     <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
-    <link rel="icon" href="{{ Vite::asset('resources/img/kaiadmin/favicon.ico') }}" type="image/x-icon" />
+    <link rel="icon" href="{{ asset('img/kaiadmin/favicon.ico') }}" type="image/x-icon" />
 
     <!-- Fonts and icons -->
-    <script src="{{ Vite::asset('resources/js/plugin/webfont/webfont.min.js') }}"></script>
+    <script src="{{ asset('js/plugin/webfont/webfont.min.js') }}"></script>
     <script>
         WebFont.load({
             google: {
@@ -20,7 +20,7 @@
                     "Font Awesome 5 Brands",
                     "simple-line-icons",
                 ],
-                urls: ["{{ Vite::asset('resources/css/fonts.min.css') }}"],
+                urls: ["{{ asset('css/fonts.min.css') }}"],
             },
             active: function () {
                 sessionStorage.fonts = true;
@@ -38,9 +38,9 @@
     </style>
 
     <!-- CSS Files -->
-    <link rel="stylesheet" href="{{ Vite::asset('resources/css/bootstrap.min.css') }}" />
-    <link rel="stylesheet" href="{{ Vite::asset('resources/css/plugins.min.css') }}" />
-    <link rel="stylesheet" href="{{ Vite::asset('resources/css/kaiadmin.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/plugins.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/kaiadmin.min.css') }}" />
 </head>
 <body class="bg-dark">
     <div class="container">
