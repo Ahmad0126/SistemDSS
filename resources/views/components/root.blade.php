@@ -82,6 +82,11 @@
                     <div class="container-fluid">
                         <ul class="navbar-nav topbar-nav align-items-center w-100">
                             @auth
+                                @php 
+                                    if(!isset($pointer)){
+                                        $pointer = 0;
+                                    }
+                                @endphp
                                 <li class="nav-item {{ $pointer == 1 ? 'active' : '' }}">
                                     <a class="nav-link" href="{{ route('base') }}">Home</a>
                                 </li>
