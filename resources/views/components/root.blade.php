@@ -144,12 +144,12 @@
                                 </li>
                             @endauth
                             @guest
-                                <li class="nav-item">
+                                <li class="nav-item d-none d-lg-block">
                                     <a href="{{ route('home') }}" class="logo text-white">
                                         <h1 class="mb-0">SistemDSS</h1>
                                     </a>
                                 </li>
-                                <li class="nav-item ms-md-auto">
+                                <li class="nav-item ms-lg-auto">
                                     <a class="nav-link" href="{{ route('daftar') }}">Daftar</a>
                                 </li>
                                 <li class="nav-item">
