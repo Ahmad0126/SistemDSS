@@ -39,8 +39,24 @@
                             </div>
                         </div>
                         <div class="col-12">
+                            <div class="bg-dark rounded-2 mb-3">
+                                <div class="form-group text-light">
+                                    <div class="d-flex justify-content-between">
+                                        <p class="mb-0">
+                                            HTML
+                                        </p>
+                                        <a href="#" class="text-white" id="link" data-link="{{ '<iframe src="'.route('show_grafik', $grafik->id).'" frameborder="0"></iframe>' }}"><u>Copy</u></a>
+                                        
+                                    </div>
+                                </div>
+                                <hr class="text-light m-0 border-2">
+                                <div class="form-group">
+                                    <span class="text-light"><</span><span class="text-primary">iframe </span><span class="text-info">src</span><span class="text-light">=</span><span style="color: rgb(224, 122, 39)">"{{ route('show_grafik', $grafik->id) }}" </span><span class="text-info">frameborder</span><span class="text-light">=</span><span style="color: rgb(224, 122, 39)">"0"</span><span class="text-light">></span><span class="text-light"><</span><span class="text-primary">iframe</span><span class="text-light">></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
                             <a href="{{ route('show_grafik', $grafik->id) }}" target="_blank" class="btn btn-info">Fullscreen <i class="fas fa-external-link-alt"></i></a>
-                            <button id="link" class="btn btn-secondary" data-link="{{ route('show_grafik', $grafik->id) }}">Link iframe</button>
                             @auth
                                 @if ($grafik->id_user == auth()->id())
                                     <a href="{{ route('unpublish_grafik', $grafik->id_grafik) }}" class="btn btn-warning"
@@ -70,11 +86,11 @@
                     text: '{{ $grafik->judul }}'
                 },
                 tooltip: {
-                    @if($grafik->tipe == 'line')
+                    @if ($grafik->tipe == 'line')
                         trigger: 'axis'
                     @endif
                 },
-                grid:{
+                grid: {
                     left: '{{ $grafik->ml ?? 0 }}%',
                     right: '{{ $grafik->mr ?? 0 }}%',
                     top: '{{ $grafik->mt ?? 0 }}%',
@@ -89,8 +105,8 @@
                     radar: {
                         indicator: chartColumns.slice(1).map(col => ({
                             name: col, // Nama sumbu berdasarkan nama kolom
-                            @if($grafik->max_sumbu)
-                                max: {{ $grafik->max_sumbu }}  // Maksimum nilai sumbu (bisa diatur dinamis)
+                            @if ($grafik->max_sumbu)
+                                max: {{ $grafik->max_sumbu }} // Maksimum nilai sumbu (bisa diatur dinamis)
                             @endif
                         }))
                     },
@@ -110,32 +126,52 @@
                     },
                     @if ($grafik->orientasi == 'v')
                         @if ($grafik->tipe != 'pie' && $grafik->tipe != 'radar')
-                            xAxis: { type: 'value' },
-                            yAxis: { type: 'category' },
+                            xAxis: {
+                                type: 'value'
+                            },
+                            yAxis: {
+                                type: 'category'
+                            },
                         @endif
                         series: chartColumns.slice(1).map(col => ({
-                            type: '{{ $grafik->tipe ?? "bar" }}',
+                            type: '{{ $grafik->tipe ?? 'bar' }}',
                             name: col,
                             symbol: 'none',
                             @if ($grafik->tipe == 'pie')
-                                encode: { itemName: chartColumns[0], value: col }
+                                encode: {
+                                    itemName: chartColumns[0],
+                                    value: col
+                                }
                             @else
-                                encode: { y: chartColumns[0], x: col }
+                                encode: {
+                                    y: chartColumns[0],
+                                    x: col
+                                }
                             @endif
                         }))
                     @else
                         @if ($grafik->tipe != 'pie' && $grafik->tipe != 'radar')
-                            xAxis: { type: 'category' },
-                            yAxis: { type: 'value' },
+                            xAxis: {
+                                type: 'category'
+                            },
+                            yAxis: {
+                                type: 'value'
+                            },
                         @endif
                         series: chartColumns.slice(1).map(col => ({
-                            type: '{{ $grafik->tipe ?? "bar" }}',
+                            type: '{{ $grafik->tipe ?? 'bar' }}',
                             name: col,
                             symbol: 'none',
                             @if ($grafik->tipe == 'pie')
-                                encode: { itemName: chartColumns[0], value: col }
+                                encode: {
+                                    itemName: chartColumns[0],
+                                    value: col
+                                }
                             @else
-                                encode: { x: chartColumns[0], y: col }
+                                encode: {
+                                    x: chartColumns[0],
+                                    y: col
+                                }
                             @endif
                         }))
                     @endif
@@ -148,11 +184,11 @@
                 myChart.resize();
             })
         } else {
-            document.getElementById('chart').innerHTML = 
+            document.getElementById('chart').innerHTML =
                 '<div class="alert alert-danger">{{ $query_error ?? 'Insufficient data to render chart.' }}</div>';
         }
-    
-        $('#link').click(function(){
+
+        $('#link').click(function() {
             const link = $(this).data('link')
             navigator.clipboard.writeText(link)
 

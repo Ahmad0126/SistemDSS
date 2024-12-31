@@ -62,7 +62,6 @@
                     },
                     series: {
                         type: 'radar',
-                        areaStyle: {},
                         data: chartData.map(row => ({
                             value: chartColumns.slice(1).map(col => row[col]), // Ambil nilai setiap metrik
                             name: row[chartColumns[0]] // Ambil nama kategori (baris pertama)
